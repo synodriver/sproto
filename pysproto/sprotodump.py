@@ -1,96 +1,147 @@
-#coding:utf-8
-import sprotoparser
+# coding:utf-8
+from typing import Union
 import struct
+from io import BytesIO
 import sys, argparse, os, codecs
 
-def packbytes(s):
-    s = str(s)
+import pysproto.sprotoparser as sprotoparser
+
+
+
+def ensure_bytes(data) -> bytes:
+    if isinstance(data, str):
+        return data.encode()
+    return bytes(data)
+
+
+def packbytes(s: Union[bytes, str]) -> bytes:
+    s = ensure_bytes(s)
     return struct.pack("<I%ds" % len(s), len(s), s)
 
-def packvalue(v):
+
+def packvalue(v: int) -> bytes:
     v = (v + 1) * 2
     return struct.pack("<H", v)
 
+
 def packfield(f):
-    strtbl = []
+    strtbl = BytesIO()
     if f["array"]:
-        if f["key"]: #if has no "key" already set to f["key"] = None
-            strtbl.append("\6\0")
+        if f["key"]:  # if has no "key" already set to f["key"] = None
+            strtbl.write(b"\6\0")
         else:
-            strtbl.append("\5\0")
+            strtbl.write(b"\5\0")
     else:
-        strtbl.append("\4\0")
-    strtbl.append("\0\0")
+        strtbl.write(b"\4\0")
+    strtbl.write(b"\0\0")
     if f["builtin"] != None:
-        strtbl.append(packvalue(f["builtin"]))
-        strtbl.append("\1\0")
-        strtbl.append(packvalue(f["tag"]))
+        strtbl.write(packvalue(f["builtin"]))
+        strtbl.write(b"\1\0")
+        strtbl.write(packvalue(f["tag"]))
     else:
-        strtbl.append("\1\0")
-        strtbl.append(packvalue(f["type"]))
-        strtbl.append(packvalue(f["tag"]))
+        strtbl.write(b"\1\0")
+        strtbl.write(packvalue(f["type"]))
+        strtbl.write(packvalue(f["tag"]))
     if f["array"]:
-        strtbl.append(packvalue(1))
+        strtbl.write(packvalue(1))
     if f["key"]:
-        strtbl.append(packvalue(f["key"]))
-    strtbl.append(packbytes(f["name"]))
-    return packbytes("".join(strtbl))
+        strtbl.write(packvalue(f["key"]))
+    strtbl.write(packbytes(f["name"]))
+    return packbytes(strtbl.getvalue())
+
 
 def packtype(name, t, alltypes):
     fields = []
     tmp = {}
-    for _, f in enumerate(t):
+    for f in t:  # type: dict
         tmp["array"] = f["array"]
         tmp["name"] = f["name"]
         tmp["tag"] = f["tag"]
+        tmp["extra"] = f.get("decimal", None)
+
         tname = f["typename"]
-        tmp["builtin"] = sprotoparser.builtin_types[tname] if tname in sprotoparser.builtin_types else None
+        tmp["builtin"] = sprotoparser.builtin_types.get(tname, None)
         subtype = None
 
+        if tname == "binary":
+            tmp["extra"] = 1
         if tmp["builtin"] == None:
             assert alltypes[tname], "type %s not exists" % tname
             subtype = alltypes[tname]
             tmp["type"] = subtype["id"]
         else:
             tmp["type"] = None
-        if "key" in f:
-            tmp["key"] = subtype["fields"][f["key"]["name"]]
-            assert tmp["key"], "Invalid map index %d" % f["key"]["name"]
+        if f.get("key", None) is not None:  # todo Line 352
+            assert f["array"]
+            if f["key"] == "":
+                tmp["map"] = 1
+                c = 0
+                min_t = sys.maxsize
+                for n, t in enumerate(subtype["fields"]):
+                    c += 1
+                    if t["tag"] < min_t:
+                        min_t = t["tag"]
+                        f["key"] = n
+                assert c == 2, "Invalid map definition: %s, must only have two fields" % tmp["name"]
+            stfield = subtype["fields"][f.get("Key", None)]
+            if not stfield or not stfield.get("buildin", None):
+                raise AssertionError("Invalid map index :" + f["key"])
+            tmp["key"] = stfield.get("tag", None)
+            # tmp["key"] = subtype["fields"][f["key"]["name"]]
+            # assert tmp["key"], "Invalid map index %d" % f["key"]["name"]
         else:
             tmp["key"] = None
         fields.append(packfield(tmp))
-    data = None
+    data = BytesIO()
     if not fields:
-        data = ["\1\0", "\0\0", packbytes(name)]
+        data.write(b"\1\0\0\0")
+        data.write(packbytes(name))
+        # data = [b"\1\0", b"\0\0", packbytes(name)]
     else:
-        data = ["\2\0", "\0\0", "\0\0", packbytes(name), packbytes("".join(fields))]
-    return packbytes("".join(data))
+        data.write(b"\2\0\0\0\0\0")
+        data.write(packbytes(name))
+        data.write(packbytes(b"".join(fields)))
+        # data = [b"\2\0", b"\0\0", b"\0\0", packbytes(name), packbytes(b"".join(fields))]
+    return packbytes(data.getvalue())
 
-def packproto(name, p, alltypes):
+
+def packproto(name, p, alltypes) -> bytes:
     if "request" in p:
         request = alltypes[p["request"]]
         assert request != None, "Protocol %s request types not found" % (name, p["request"])
         request = request["id"]
 
-    tmp = ["\4\0", "\0\0", packvalue(p["tag"])]
+    tmp = BytesIO()
+    tmp.write(b"\4\0\0\0")
+    tmp.write(packvalue(p["tag"]))
+
+    # tmp = ["\4\0", "\0\0", packvalue(p["tag"])]
     if "request" not in p and "response" not in p:
-        tmp[0] = "\2\0"
+        tmp.getbuffer()[:2] = b"\2\0"
+        # tmp[0] = "\2\0"
     else:
         if "request" in p:
-            tmp.append(packvalue(alltypes[p["request"]]["id"]))
+            tmp.write(packvalue(alltypes[p["request"]]["id"]))
         else:
-            tmp.append("\1\0")
+            tmp.write(b"\1\0")
         if "response" in p:
-            tmp.append(packvalue(alltypes[p["response"]]["id"]))
+            tmp.write(packvalue(alltypes[p["response"]]["id"]))
         else:
-            tmp[0] = "\3\0"
-    tmp.append(packbytes(name))
-    return packbytes("".join(tmp))
+            tmp.getbuffer()[:2] = b"\3\0"
+    tmp.write(packbytes(name))
+    return packbytes(tmp.getvalue())
 
-def packgroup(t, p):
+
+def packgroup(t, p) -> bytes:
+    """
+
+    :param t: Type
+    :param p: Protocol
+    :return:
+    """
     if not t:
         assert p
-        return "\0\0"
+        return b"\0\0"
     tp = None
     alltypes = {}
     alltype_names = []
@@ -99,44 +150,56 @@ def packgroup(t, p):
     alltype_names.sort()
     for idx, name in enumerate(alltype_names):
         fields = {}
-        for _, type_fields in enumerate(t[name]):
+        for type_fields in t[name]:
             if type_fields["typename"] in sprotoparser.builtin_types:
                 fields[type_fields["name"]] = type_fields["tag"]
-        alltypes[name] = { "id":idx, "fields":fields }
+        alltypes[name] = {"id": idx, "fields": fields}
 
-    tt = []
-    for _, name in enumerate(alltype_names):
-        tt.append(packtype(name, t[name], alltypes))
+    tt = BytesIO()
+    for name in alltype_names:
+        tt.write(packtype(name, t[name], alltypes))
 
-    tt = packbytes("".join(tt))
+    tt = packbytes(tt.getvalue())
     if p:
         tmp = []
         for name, tbl in p.iteritems():
             tmp.append(tbl)
             tbl["name"] = name
         tmp = sorted(tmp, key=lambda k: k["tag"])
-        tp = []
-        for _, tbl in enumerate(tmp):
-            tp.append(packproto(tbl["name"], tbl, alltypes))
-        tp = packbytes("".join(tp))
-    result = None
+        tp = BytesIO()
+        for tbl in tmp:
+            tp.write(packproto(tbl["name"], tbl, alltypes))
+        tp = packbytes(tp.getvalue())
+    result = BytesIO()
     if tp == None:
-        result = ["\1\0","\0\0",tt]
+        result.write(b"\1\0\0\0")
+        result.write(tt)
+        # result = [b"\1\0", b"\0\0", tt]
     else:
-        result = ["\2\0","\0\0","\0\0",tt,tp]
-    return "".join(result)
+        result.write(b"\2\0\0\0\0\0")
+        result.write(tt)
+        result.write(tp)
+        # result = [b"\2\0", b"\0\0", b"\0\0", tt, tp]
+    return result.getvalue()
 
-def encodeall(r):
+
+def encodeall(r) -> bytes:  # todo 彻底核对lua的对应这个名字的函数
     return packgroup(r["type"], r["protocol"])
 
-def parse_ast(ast):
+
+def parse_ast(ast) -> bytes:
     return encodeall(ast)
+
 
 def dump(build, outfile):
     data = parse_ast(build)
-    f = open(outfile, "wb")
-    f.write(data)
-    f.close()
+    if isinstance(outfile, str):
+        f = open(outfile, "wb")
+        f.write(data)
+        f.close()
+    else:
+        outfile.write(data)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -162,5 +225,6 @@ if __name__ == "__main__":
 
     if args.verbose == True:
         import json
+
         print(json.dumps(build, indent=4))
     dump(build, args.outfile)

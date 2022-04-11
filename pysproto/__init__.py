@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-__version__ = "0.1.0dev1"
-def main():
-    pass
+from pysproto._sproto import *
+from pysproto.sprotoparser import parse
+from pysproto.sprotodump import dump, parse_ast
 
-
-if __name__ == "__main__":
-    main()
+__version__ = "0.1.0.dev2"

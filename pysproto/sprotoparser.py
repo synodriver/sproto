@@ -9,7 +9,7 @@ fullname = re.compile(r"[\w+\.]*\w+")
 
 
 class MainKey(str):
-    grammar = "(", word, ")"
+    grammar = "(", optional(word), ")"
 
 
 class TypeName(object):
@@ -21,10 +21,12 @@ class Filed(List):
               optional(MainKey), nomeaning, endl
 
 
-class Struct(List): pass
+class Struct(List):
+    pass
 
 
-class Type(List): pass
+class Type(List):
+    pass
 
 
 Struct.grammar = "{", nomeaning, attr("fileds", maybe_some([Filed, Type])), "}"
@@ -50,7 +52,7 @@ class Sproto(List):
 
 # ====================================================================
 
-builtin_types = {"integer": 0, "boolean": 1, "string": 2}
+builtin_types = {"integer": 0, "boolean": 1, "string": 2, "double": 3, "binary": 2}   # add double and binary
 
 import re as rawre
 
@@ -71,7 +73,7 @@ def checktype(types, ptype, t):
 
 
 def flattypename(r):
-    for typename, t in r["type"].iteritems():
+    for typename, t in r["type"].items():
         for _, f in enumerate(t):
             ftype = f["typename"]
             fullname = checktype(r["type"], typename, ftype)
