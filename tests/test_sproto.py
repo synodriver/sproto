@@ -23,14 +23,14 @@ class TestSproto(TestCase):
         new_count = len(gc.get_objects())
         self.assertEqual(old_count, new_count)
 
-    # def test_pack_unpack(self):
-    #     def test_pack_unpack_():
-    #         for i in range(1000):
-    #             length = randint(1, 1000)
-    #             data = bytes([randint(0, 255) for _ in range(length)])
-    #             self.assertEqual(unpack(pack(data)).rstrip(b"\x00"), data.rstrip(b"\x00"))
-    #
-    #     self._run_gc_test(test_pack_unpack_)
+    def test_pack_unpack(self):
+        def test_pack_unpack_():
+            for i in range(1000):
+                length = randint(1, 1000)
+                data = bytes([randint(0, 255) for _ in range(length)])
+                self.assertEqual(unpack(pack(data)).rstrip(b"\x00"), data.rstrip(b"\x00"))
+
+        self._run_gc_test(test_pack_unpack_)
 
     def test_dump(self):
         ast = parse(""".package {
@@ -52,30 +52,30 @@ class TestSproto(TestCase):
         # self._run_gc_test(test_dump_, 1)
         test_dump_()
 
-    # def test_dump_nested(self):
-    #     ast = parse("""
-    #     .Person {
-    #     name 0 : string
-    #     id 1 : integer
-    #     email 2 : string
-    #     real 3: double
-    #
-    #     .PhoneNumber {
-    #         number 99 : string
-    #         type  1000: integer
-    #     }
-    #     phone 4 : *PhoneNumber
-    #     phonemap 5 : *PhoneNumber()
-    # }
-    #
-    # .AddressBook {
-    #     person 0: *Person(id)
-    #     others 1: *Person
-    # }
-    #     """, "")
-    #     dump = parse_ast(ast)
-    #     sp = Sproto(dump)
-    #     sp.dump()
+    def test_dump_nested(self):
+        ast = parse("""
+        .Person {
+        name 0 : string
+        id 1 : integer
+        email 2 : string
+        real 3: double
+
+        .PhoneNumber {
+            number 99 : string
+            type  1000: integer
+        }
+        phone 4 : *PhoneNumber
+        phonemap 5 : *PhoneNumber()
+    }
+
+    .AddressBook {
+        person 0: *Person(id)
+        others 1: *Person
+    }
+        """, "")
+        dump = parse_ast(ast)
+        sp = Sproto(dump)
+        sp.dump()
 
     def test_bin(self):
         sp_data = """
@@ -118,10 +118,30 @@ Person.PhoneNumber
 	number (0) binary
 	type (1) integer
         """
-        with open("person.spb", "rb") as f:
-            data =f.read()
+        with open(r"person.spb", "rb") as f:
+            data = f.read()
         sp = Sproto(data)
-        sp.dump()
+        # sp.dump()
+        tp = sp.querytype("Person")
+        encoded = tp.encode({
+            "name": b"crystal",
+            "id": 1001,
+            "email": b"crystal@example.com",
+            "phone": [
+                {
+                    "type": 1,
+                    "number": b"10086",
+                },
+                {
+                    "type": 2,
+                    "number": b"10010",
+                },
+            ],
+        })
+        print(encoded)
+        dt = tp.decode(encoded)
+        print(dt)
+        pass
 
     def tearDown(self) -> None:
         pass

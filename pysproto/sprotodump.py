@@ -2,10 +2,11 @@
 from typing import Union
 import struct
 from io import BytesIO
-import sys, argparse, os, codecs
+import sys
+import argparse
+import os
 
 import pysproto.sprotoparser as sprotoparser
-
 
 
 def ensure_bytes(data) -> bytes:
@@ -220,14 +221,14 @@ if __name__ == "__main__":
 
     build = None
     if args.src_file:
-        text = codecs.open(args.src_file, encoding="utf-8").read()
+        text = open(args.src_file, encoding="utf-8").read()
         build = sprotoparser.parse(text, os.path.basename(args.src_file))
     else:
         sproto_list = []
         for f in os.listdir(args.src_dir):
             file_path = os.path.join(args.src_dir, f)
             if os.path.isfile(file_path) and f.endswith(".sproto"):
-                text = codecs.open(file_path, encoding="utf-8").read()
+                text = open(file_path, encoding="utf-8").read()
                 sproto_list.append((text, f))
 
         build = sprotoparser.parse_list(sproto_list)

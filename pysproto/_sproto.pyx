@@ -8,7 +8,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 from cpython.long cimport PyLong_AsLong, PyLong_FromLong,PyLong_FromLongLong, PyLong_AsLongLong, PyLong_Check
 from cpython.float cimport PyFloat_Check, PyFloat_AsDouble, PyFloat_FromDouble
 from cpython.bool cimport PyBool_FromLong
-from cpython.ref cimport Py_TYPE, Py_XDECREF
+from cpython.ref cimport Py_TYPE
 from cpython.dict cimport PyDict_GetItemString, PyDict_Check, PyDict_SetItemString, PyDict_SetItem, PyDict_New
 from cpython.list cimport PyList_Check, PyList_Size, PyList_New, PyList_Append
 from cpython.bytes cimport PyBytes_Check, PyBytes_AsStringAndSize, PyBytes_FromStringAndSize
@@ -133,7 +133,7 @@ cdef int encode(const sproto.sproto_arg *args) except * with gil:
                     raise SprotoError("type mismatch, tag:%s, expected unicode, got:%s\n", tagname, Py_TYPE(data).tp_name)
                 finally:
                     return sproto.SPROTO_CB_ERROR
-            ptr = PyUnicode_AsUTF8AndSize(data, &l)
+            ptr = <char*>PyUnicode_AsUTF8AndSize(data, &l)
         if <int>l>length:
             return sproto.SPROTO_CB_ERROR
         memcpy(args.value, ptr, <size_t> l)
@@ -266,7 +266,7 @@ cdef int decode(const sproto.sproto_arg *args) except * with gil: # except * wit
         sub.data = <PyObject*>d
         if mainindex >= 0:
             sub.mainindex = args.mainindex
-            r = sproto.sproto_decode(args.subtype, args.value, length, decode, &sub)
+            r = sproto.sproto_decode(args.subtype, args.value, <int>length, decode, &sub)
             if r<0:
                 return sproto.SPROTO_CB_ERROR
             if r!=length:
@@ -275,7 +275,7 @@ cdef int decode(const sproto.sproto_arg *args) except * with gil: # except * wit
         else:
             sub.mainindex = -1
             data = <object>sub.data
-            r = sproto.sproto_decode(args.subtype, args.value, length, decode, &sub)
+            r = sproto.sproto_decode(args.subtype, args.value, <int>length, decode, &sub)
             if r<0:
                 return sproto.SPROTO_CB_ERROR
             if r!=length:
@@ -285,7 +285,7 @@ cdef int decode(const sproto.sproto_arg *args) except * with gil: # except * wit
             PyList_Append(<object>obj , data)
         else:
             PyDict_SetItemString(<object>self.data, tagname, data)
-        Py_XDECREF(<PyObject*>data)
+        # Py_XDECREF(<PyObject*>data) catch you! damn refcnt!
         if self.mainindex == tagid:
             self.map_key = <PyObject*>data
     else:
@@ -313,7 +313,7 @@ cdef class SprotoType:
     def name(self):
         return (<bytes>sproto.sproto_name(self.st)).decode()
 
-    cpdef inline object decode(self, const uint8_t[::1] buffer):
+    cpdef inline dict decode(self, const uint8_t[::1] buffer):
         assert self.st != NULL
         cdef:
             dict d = {}
@@ -327,7 +327,7 @@ cdef class SprotoType:
             raise SprotoError("decode error")
         return d
 
-    cpdef inline encode_into(self, dict data, uint8_t[::1] buffer):
+    cpdef inline int encode_into(self, dict data, uint8_t[::1] buffer):
         """
         encode data into buffer
         :param data: 
@@ -395,7 +395,7 @@ cdef class Sproto:
         if st:
             return SprotoType.from_ptr(st)
 
-    cpdef inline tuple protocol(self, tag_or_name):
+    cpdef inline object protocol(self, tag_or_name):
         assert self.sp != NULL
         cdef:
             const char* name
@@ -426,7 +426,7 @@ cdef class Sproto:
             ret3 = None
         else:
             ret3 = SprotoType.from_ptr(response)
-        return ret1, ret2, ret3
+        return (ret1, ret2, ret3)
 
     cpdef inline int sproto_protoresponse(self, int proto):
         return sproto.sproto_protoresponse(self.sp, proto)
@@ -437,7 +437,7 @@ cpdef inline int pack_into(const uint8_t[::1] inp, uint8_t[::1] out):
         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
     if <size_t>out.shape[0] < maxsz:
         raise SprotoError("output buffer is too small")
-    cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], maxsz)
+    cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)
     if <size_t>ret > maxsz:
         raise SprotoError("packing error, return size = %d" % ret)
     return ret
@@ -450,7 +450,7 @@ cpdef inline bytes pack(const uint8_t[::1] inp):
     cdef void* out = PyMem_Malloc(maxsz)
     if out == NULL:
         raise MemoryError
-    cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, maxsz)
+    cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)
     if <size_t>ret > maxsz:
         raise SprotoError("packing error, return size = %d" % ret)
     bt = <bytes>((<uint8_t*>out)[:ret])
