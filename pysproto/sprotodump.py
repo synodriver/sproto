@@ -25,10 +25,13 @@ def packvalue(v: int) -> bytes:
 
 
 def packfield(f):
-    strtbl = BytesIO()
+    strtbl = BytesIO()   # todo L289
     if f["array"]:
         if f["key"]:  # if has no "key" already set to f["key"] = None
-            strtbl.write(b"\6\0")
+            if f.get("map", None):
+                strtbl.write(b"\7\0")
+            else:
+                strtbl.write(b"\6\0")
         else:
             strtbl.write(b"\5\0")
     else:
@@ -36,7 +39,10 @@ def packfield(f):
     strtbl.write(b"\0\0")
     if f["builtin"] != None:
         strtbl.write(packvalue(f["builtin"]))
-        strtbl.write(b"\1\0")
+        if f.get("extra", None):
+            strtbl.write(packvalue(f["extra"]))
+        else:
+            strtbl.write(b"\1\0")
         strtbl.write(packvalue(f["tag"]))
     else:
         strtbl.write(b"\1\0")
@@ -44,8 +50,10 @@ def packfield(f):
         strtbl.write(packvalue(f["tag"]))
     if f["array"]:
         strtbl.write(packvalue(1))
-    if f["key"]:
-        strtbl.write(packvalue(f["key"]))
+        if f["key"]:
+            strtbl.write(packvalue(f["key"]))
+            if f.get("map", None):
+                strtbl.write(packvalue(f["map"]))
     strtbl.write(packbytes(f["name"]))
     return packbytes(strtbl.getvalue())
 
@@ -83,10 +91,11 @@ def packtype(name, t, alltypes):
                         min_t = t["tag"]
                         f["key"] = n
                 assert c == 2, "Invalid map definition: %s, must only have two fields" % tmp["name"]
-            stfield = subtype["fields"][f.get("Key", None)]
+            stfield = subtype["fields"].get(f.get("key", None), None)
             if not stfield or not stfield.get("buildin", None):
                 raise AssertionError("Invalid map index :" + f["key"])
             tmp["key"] = stfield.get("tag", None)
+
             # tmp["key"] = subtype["fields"][f["key"]["name"]]
             # assert tmp["key"], "Invalid map index %d" % f["key"]["name"]
         else:
@@ -151,13 +160,13 @@ def packgroup(t, p) -> bytes:
     for idx, name in enumerate(alltype_names):
         fields = {}
         for type_fields in t[name]:
-            if type_fields["typename"] in sprotoparser.builtin_types:
+            if type_fields["typename"] in sprotoparser.builtin_types:  # todo add key too nested
                 fields[type_fields["name"]] = type_fields["tag"]
         alltypes[name] = {"id": idx, "fields": fields}
 
     tt = BytesIO()
     for name in alltype_names:
-        tt.write(packtype(name, t[name], alltypes))
+        tt.write(packtype(name, t[name], alltypes)) # alltypes["Person"]["fields"]["key"]
 
     tt = packbytes(tt.getvalue())
     if p:

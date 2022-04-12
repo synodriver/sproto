@@ -12,13 +12,17 @@ class MainKey(str):
     grammar = "(", optional(word), ")"
 
 
+class Decimal(int):
+    grammar = "(", optional(tag), ")"
+
+
 class TypeName(object):
     grammar = flag("is_arr", "*"), attr("fullname", fullname)
 
 
 class Filed(List):
     grammar = attr("filed", word), attr("tag", tag), ":", attr("typename", TypeName), \
-              optional(MainKey), nomeaning, endl
+              optional(Decimal), optional(MainKey), nomeaning, endl
 
 
 class Struct(List):
@@ -52,7 +56,7 @@ class Sproto(List):
 
 # ====================================================================
 
-builtin_types = {"integer": 0, "boolean": 1, "string": 2, "double": 3, "binary": 2}   # add double and binary
+builtin_types = {"integer": 0, "boolean": 1, "string": 2, "double": 3, "binary": 2}  # add double and binary
 
 import re as rawre
 
@@ -90,7 +94,7 @@ class Convert:
     protocol_tags = {}  # just for easiliy check
 
     @staticmethod
-    def parse(text, name):
+    def parse(text, name="=text"):
         Convert.group = {}
         Convert.type_dict = {}
         Convert.protocol_dict = {}
@@ -111,7 +115,7 @@ class Convert:
         return Convert.group
 
     @staticmethod
-    def convert_type(obj, parent_name=""):
+    def convert_type(obj, parent_name=""):  # todo add mainkey
         if parent_name != "":
             obj.name = parent_name + "." + obj.name
         type_name = obj.name
@@ -121,7 +125,7 @@ class Convert:
         Convert.type_dict[type_name] = Convert.convert_struct(obj.struct, type_name)
 
     @staticmethod
-    def convert_struct(obj, name=""):
+    def convert_struct(obj, name=""):  # todo 你 加入decimal
         struct = []
         for filed in obj.fileds:
             if type(filed) == Filed:
@@ -133,6 +137,12 @@ class Convert:
                 filed_info["array"] = filed.typename.is_arr
                 filed_info["typename"] = filed_typename
                 filed_info["type"] = filed_type
+                if len(filed) > 0:
+                    if filed_typename == "integer":
+                        filed_info["decimal"] = filed[0]
+                    else:
+                        filed_info["key"] = filed[0]  # todo 解决冲突
+
                 struct.append(filed_info)
             elif type(filed) == Type:
                 Convert.convert_type(filed, name)
@@ -176,7 +186,7 @@ class Convert:
 __all__ = ["parse", "parse_list", "builtin_types"]
 
 
-def parse(text, name, check=True):
+def parse(text, name="=text", check=True):
     build = Convert.parse(text, name)
     if check:
         flattypename(build)
@@ -197,7 +207,7 @@ def parse_list(sproto_list):
             assert spname not in build["protocol"], "redifine protocol name %s in %s" % (spname, v[1])
             for proto in build["protocol"]:
                 assert sp["tag"] != build["protocol"][proto]["tag"], "redifine protocol tag %d in %s with %s" % (
-                sp["tag"], proto, spname)
+                    sp["tag"], proto, spname)
             build["protocol"][spname] = sp
 
     flattypename(build)

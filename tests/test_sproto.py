@@ -38,6 +38,7 @@ class TestSproto(TestCase):
                                 session 1 : integer
                             }""", "")
         dump = parse_ast(ast)
+
         def test_dump_():
             sp = Sproto(dump)
             print(dump)
@@ -47,8 +48,10 @@ class TestSproto(TestCase):
             print(encoded)
             data = tp.decode(encoded)
             self.assertEqual(data, {"type": 1, "session": 2})
+
         # self._run_gc_test(test_dump_, 1)
         test_dump_()
+
     # def test_dump_nested(self):
     #     ast = parse("""
     #     .Person {
@@ -73,6 +76,52 @@ class TestSproto(TestCase):
     #     dump = parse_ast(ast)
     #     sp = Sproto(dump)
     #     sp.dump()
+
+    def test_bin(self):
+        sp_data = """
+        .Person {
+	name 0 : binary
+	id 1 : integer
+	email 2 : binary
+
+	.PhoneNumber {
+		number 0 : binary
+		type 1 : integer
+	}
+
+	phone 3 : *PhoneNumber
+	pi    4 : integer(5)
+}
+
+.AddressBook {
+	person 0 : *Person(id)
+	others 1 : *Person
+}
+        """
+        ast = parse(sp_data, "")
+        dump = parse_ast(ast)
+        sp = Sproto(dump)
+        sp.dump()
+
+    def test_spb(self):
+        """
+        AddressBook
+	person (0) *Person key[1]
+	others (1) *Person
+Person
+	name (0) binary
+	id (1) integer
+	email (2) binary
+	phone (3) *Person.PhoneNumber
+	pi (4) decimal(100000)
+Person.PhoneNumber
+	number (0) binary
+	type (1) integer
+        """
+        with open("person.spb", "rb") as f:
+            data =f.read()
+        sp = Sproto(data)
+        sp.dump()
 
     def tearDown(self) -> None:
         pass
