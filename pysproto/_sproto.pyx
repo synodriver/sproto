@@ -382,6 +382,7 @@ cdef class Sproto:
     def __dealloc__(self):
         if self.sp != NULL:
             sproto.sproto_release(self.sp)
+            self.sp = NULL
 
     cpdef inline void dump(self):
         assert self.sp != NULL

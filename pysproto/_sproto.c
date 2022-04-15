@@ -6341,7 +6341,7 @@ static void __pyx_pf_8pysproto_7_sproto_6Sproto_2__dealloc__(struct __pyx_obj_8p
  *     def __dealloc__(self):
  *         if self.sp != NULL:             # <<<<<<<<<<<<<<
  *             sproto.sproto_release(self.sp)
- * 
+ *             self.sp = NULL
  */
   __pyx_t_1 = ((__pyx_v_self->sp != NULL) != 0);
   if (__pyx_t_1) {
@@ -6350,17 +6350,26 @@ static void __pyx_pf_8pysproto_7_sproto_6Sproto_2__dealloc__(struct __pyx_obj_8p
  *     def __dealloc__(self):
  *         if self.sp != NULL:
  *             sproto.sproto_release(self.sp)             # <<<<<<<<<<<<<<
+ *             self.sp = NULL
+ * 
+ */
+    sproto_release(__pyx_v_self->sp);
+
+    /* "pysproto/_sproto.pyx":385
+ *         if self.sp != NULL:
+ *             sproto.sproto_release(self.sp)
+ *             self.sp = NULL             # <<<<<<<<<<<<<<
  * 
  *     cpdef inline void dump(self):
  */
-    sproto_release(__pyx_v_self->sp);
+    __pyx_v_self->sp = NULL;
 
     /* "pysproto/_sproto.pyx":383
  * 
  *     def __dealloc__(self):
  *         if self.sp != NULL:             # <<<<<<<<<<<<<<
  *             sproto.sproto_release(self.sp)
- * 
+ *             self.sp = NULL
  */
   }
 
@@ -6376,8 +6385,8 @@ static void __pyx_pf_8pysproto_7_sproto_6Sproto_2__dealloc__(struct __pyx_obj_8p
   __Pyx_RefNannyFinishContext();
 }
 
-/* "pysproto/_sproto.pyx":386
- *             sproto.sproto_release(self.sp)
+/* "pysproto/_sproto.pyx":387
+ *             self.sp = NULL
  * 
  *     cpdef inline void dump(self):             # <<<<<<<<<<<<<<
  *         assert self.sp != NULL
@@ -6392,7 +6401,7 @@ static CYTHON_INLINE void __pyx_f_8pysproto_7_sproto_6Sproto_dump(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("dump", 0);
 
-  /* "pysproto/_sproto.pyx":387
+  /* "pysproto/_sproto.pyx":388
  * 
  *     cpdef inline void dump(self):
  *         assert self.sp != NULL             # <<<<<<<<<<<<<<
@@ -6403,12 +6412,12 @@ static CYTHON_INLINE void __pyx_f_8pysproto_7_sproto_6Sproto_dump(struct __pyx_o
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!((__pyx_v_self->sp != NULL) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 387, __pyx_L1_error)
+      __PYX_ERR(0, 388, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "pysproto/_sproto.pyx":388
+  /* "pysproto/_sproto.pyx":389
  *     cpdef inline void dump(self):
  *         assert self.sp != NULL
  *         sproto.sproto_dump(self.sp)             # <<<<<<<<<<<<<<
@@ -6417,8 +6426,8 @@ static CYTHON_INLINE void __pyx_f_8pysproto_7_sproto_6Sproto_dump(struct __pyx_o
  */
   sproto_dump(__pyx_v_self->sp);
 
-  /* "pysproto/_sproto.pyx":386
- *             sproto.sproto_release(self.sp)
+  /* "pysproto/_sproto.pyx":387
+ *             self.sp = NULL
  * 
  *     cpdef inline void dump(self):             # <<<<<<<<<<<<<<
  *         assert self.sp != NULL
@@ -6456,7 +6465,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_4dump(struct __pyx_obj_8pys
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("dump", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_8pysproto_7_sproto_6Sproto_dump(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_8pysproto_7_sproto_6Sproto_dump(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 387, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6473,7 +6482,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_4dump(struct __pyx_obj_8pys
   return __pyx_r;
 }
 
-/* "pysproto/_sproto.pyx":390
+/* "pysproto/_sproto.pyx":391
  *         sproto.sproto_dump(self.sp)
  * 
  *     cpdef inline SprotoType querytype(self, type_name):             # <<<<<<<<<<<<<<
@@ -6495,7 +6504,7 @@ static CYTHON_INLINE struct __pyx_obj_8pysproto_7_sproto_SprotoType *__pyx_f_8py
   __Pyx_RefNannySetupContext("querytype", 0);
   __Pyx_INCREF(__pyx_v_type_name);
 
-  /* "pysproto/_sproto.pyx":391
+  /* "pysproto/_sproto.pyx":392
  * 
  *     cpdef inline SprotoType querytype(self, type_name):
  *         assert self.sp != NULL             # <<<<<<<<<<<<<<
@@ -6506,34 +6515,34 @@ static CYTHON_INLINE struct __pyx_obj_8pysproto_7_sproto_SprotoType *__pyx_f_8py
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!((__pyx_v_self->sp != NULL) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 391, __pyx_L1_error)
+      __PYX_ERR(0, 392, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "pysproto/_sproto.pyx":392
+  /* "pysproto/_sproto.pyx":393
  *     cpdef inline SprotoType querytype(self, type_name):
  *         assert self.sp != NULL
  *         type_name = _ensure_bytes(type_name)             # <<<<<<<<<<<<<<
  *         cdef sproto.sproto_type_t *st
  *         st = sproto.sproto_type(self.sp, <char*>type_name)
  */
-  __pyx_t_1 = __pyx_f_8pysproto_7_sproto__ensure_bytes(__pyx_v_type_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 392, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_8pysproto_7_sproto__ensure_bytes(__pyx_v_type_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 393, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF_SET(__pyx_v_type_name, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pysproto/_sproto.pyx":394
+  /* "pysproto/_sproto.pyx":395
  *         type_name = _ensure_bytes(type_name)
  *         cdef sproto.sproto_type_t *st
  *         st = sproto.sproto_type(self.sp, <char*>type_name)             # <<<<<<<<<<<<<<
  *         if st:
  *             return SprotoType.from_ptr(st)
  */
-  __pyx_t_2 = __Pyx_PyObject_AsWritableString(__pyx_v_type_name); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 394, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_AsWritableString(__pyx_v_type_name); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 395, __pyx_L1_error)
   __pyx_v_st = sproto_type(__pyx_v_self->sp, ((char *)__pyx_t_2));
 
-  /* "pysproto/_sproto.pyx":395
+  /* "pysproto/_sproto.pyx":396
  *         cdef sproto.sproto_type_t *st
  *         st = sproto.sproto_type(self.sp, <char*>type_name)
  *         if st:             # <<<<<<<<<<<<<<
@@ -6543,7 +6552,7 @@ static CYTHON_INLINE struct __pyx_obj_8pysproto_7_sproto_SprotoType *__pyx_f_8py
   __pyx_t_3 = (__pyx_v_st != 0);
   if (__pyx_t_3) {
 
-    /* "pysproto/_sproto.pyx":396
+    /* "pysproto/_sproto.pyx":397
  *         st = sproto.sproto_type(self.sp, <char*>type_name)
  *         if st:
  *             return SprotoType.from_ptr(st)             # <<<<<<<<<<<<<<
@@ -6551,13 +6560,13 @@ static CYTHON_INLINE struct __pyx_obj_8pysproto_7_sproto_SprotoType *__pyx_f_8py
  *     cpdef inline object protocol(self, tag_or_name):
  */
     __Pyx_XDECREF(((PyObject *)__pyx_r));
-    __pyx_t_1 = ((PyObject *)__pyx_f_8pysproto_7_sproto_10SprotoType_from_ptr(__pyx_v_st)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)
+    __pyx_t_1 = ((PyObject *)__pyx_f_8pysproto_7_sproto_10SprotoType_from_ptr(__pyx_v_st)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = ((struct __pyx_obj_8pysproto_7_sproto_SprotoType *)__pyx_t_1);
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pysproto/_sproto.pyx":395
+    /* "pysproto/_sproto.pyx":396
  *         cdef sproto.sproto_type_t *st
  *         st = sproto.sproto_type(self.sp, <char*>type_name)
  *         if st:             # <<<<<<<<<<<<<<
@@ -6566,7 +6575,7 @@ static CYTHON_INLINE struct __pyx_obj_8pysproto_7_sproto_SprotoType *__pyx_f_8py
  */
   }
 
-  /* "pysproto/_sproto.pyx":390
+  /* "pysproto/_sproto.pyx":391
  *         sproto.sproto_dump(self.sp)
  * 
  *     cpdef inline SprotoType querytype(self, type_name):             # <<<<<<<<<<<<<<
@@ -6611,7 +6620,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_6querytype(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("querytype", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_8pysproto_7_sproto_6Sproto_querytype(__pyx_v_self, __pyx_v_type_name, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 390, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_8pysproto_7_sproto_6Sproto_querytype(__pyx_v_self, __pyx_v_type_name, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 391, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6628,7 +6637,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_6querytype(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "pysproto/_sproto.pyx":398
+/* "pysproto/_sproto.pyx":399
  *             return SprotoType.from_ptr(st)
  * 
  *     cpdef inline object protocol(self, tag_or_name):             # <<<<<<<<<<<<<<
@@ -6661,7 +6670,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("protocol", 0);
 
-  /* "pysproto/_sproto.pyx":399
+  /* "pysproto/_sproto.pyx":400
  * 
  *     cpdef inline object protocol(self, tag_or_name):
  *         assert self.sp != NULL             # <<<<<<<<<<<<<<
@@ -6672,12 +6681,12 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!((__pyx_v_self->sp != NULL) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 399, __pyx_L1_error)
+      __PYX_ERR(0, 400, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "pysproto/_sproto.pyx":406
+  /* "pysproto/_sproto.pyx":407
  *             sproto.sproto_type_t * response
  *             object ret1, ret2, ret3  # firtst ret params
  *         if isinstance(tag_or_name, int):             # <<<<<<<<<<<<<<
@@ -6688,27 +6697,27 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "pysproto/_sproto.pyx":407
+    /* "pysproto/_sproto.pyx":408
  *             object ret1, ret2, ret3  # firtst ret params
  *         if isinstance(tag_or_name, int):
  *             tag = <int>PyLong_AsLong(tag_or_name)             # <<<<<<<<<<<<<<
  *             name = sproto.sproto_protoname(self.sp, tag_or_name)
  *             if name == NULL:
  */
-    __pyx_t_3 = PyLong_AsLong(__pyx_v_tag_or_name); if (unlikely(__pyx_t_3 == ((long)-1L) && PyErr_Occurred())) __PYX_ERR(0, 407, __pyx_L1_error)
+    __pyx_t_3 = PyLong_AsLong(__pyx_v_tag_or_name); if (unlikely(__pyx_t_3 == ((long)-1L) && PyErr_Occurred())) __PYX_ERR(0, 408, __pyx_L1_error)
     __pyx_v_tag = ((int)__pyx_t_3);
 
-    /* "pysproto/_sproto.pyx":408
+    /* "pysproto/_sproto.pyx":409
  *         if isinstance(tag_or_name, int):
  *             tag = <int>PyLong_AsLong(tag_or_name)
  *             name = sproto.sproto_protoname(self.sp, tag_or_name)             # <<<<<<<<<<<<<<
  *             if name == NULL:
  *                 return None
  */
-    __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_tag_or_name); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 408, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_tag_or_name); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 409, __pyx_L1_error)
     __pyx_v_name = sproto_protoname(__pyx_v_self->sp, __pyx_t_4);
 
-    /* "pysproto/_sproto.pyx":409
+    /* "pysproto/_sproto.pyx":410
  *             tag = <int>PyLong_AsLong(tag_or_name)
  *             name = sproto.sproto_protoname(self.sp, tag_or_name)
  *             if name == NULL:             # <<<<<<<<<<<<<<
@@ -6718,7 +6727,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
     __pyx_t_2 = ((__pyx_v_name == NULL) != 0);
     if (__pyx_t_2) {
 
-      /* "pysproto/_sproto.pyx":410
+      /* "pysproto/_sproto.pyx":411
  *             name = sproto.sproto_protoname(self.sp, tag_or_name)
  *             if name == NULL:
  *                 return None             # <<<<<<<<<<<<<<
@@ -6729,7 +6738,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
       __pyx_r = Py_None; __Pyx_INCREF(Py_None);
       goto __pyx_L0;
 
-      /* "pysproto/_sproto.pyx":409
+      /* "pysproto/_sproto.pyx":410
  *             tag = <int>PyLong_AsLong(tag_or_name)
  *             name = sproto.sproto_protoname(self.sp, tag_or_name)
  *             if name == NULL:             # <<<<<<<<<<<<<<
@@ -6738,26 +6747,26 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  */
     }
 
-    /* "pysproto/_sproto.pyx":411
+    /* "pysproto/_sproto.pyx":412
  *             if name == NULL:
  *                 return None
  *             ret1  = (<bytes>name).decode()             # <<<<<<<<<<<<<<
  *         elif isinstance(tag_or_name, (str, bytes)):
  *             bt = _ensure_bytes(tag_or_name)
  */
-    __pyx_t_5 = __Pyx_PyBytes_FromString(__pyx_v_name); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 411, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyBytes_FromString(__pyx_v_name); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 412, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (unlikely(__pyx_t_5 == Py_None)) {
       PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "decode");
-      __PYX_ERR(0, 411, __pyx_L1_error)
+      __PYX_ERR(0, 412, __pyx_L1_error)
     }
-    __pyx_t_6 = __Pyx_decode_bytes(((PyObject*)__pyx_t_5), 0, PY_SSIZE_T_MAX, NULL, NULL, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 411, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_decode_bytes(((PyObject*)__pyx_t_5), 0, PY_SSIZE_T_MAX, NULL, NULL, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 412, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_v_ret1 = __pyx_t_6;
     __pyx_t_6 = 0;
 
-    /* "pysproto/_sproto.pyx":406
+    /* "pysproto/_sproto.pyx":407
  *             sproto.sproto_type_t * response
  *             object ret1, ret2, ret3  # firtst ret params
  *         if isinstance(tag_or_name, int):             # <<<<<<<<<<<<<<
@@ -6767,7 +6776,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
     goto __pyx_L3;
   }
 
-  /* "pysproto/_sproto.pyx":412
+  /* "pysproto/_sproto.pyx":413
  *                 return None
  *             ret1  = (<bytes>name).decode()
  *         elif isinstance(tag_or_name, (str, bytes)):             # <<<<<<<<<<<<<<
@@ -6788,19 +6797,19 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "pysproto/_sproto.pyx":413
+    /* "pysproto/_sproto.pyx":414
  *             ret1  = (<bytes>name).decode()
  *         elif isinstance(tag_or_name, (str, bytes)):
  *             bt = _ensure_bytes(tag_or_name)             # <<<<<<<<<<<<<<
  *             name = <const char*>bt
  *             tag = sproto.sproto_prototag(self.sp, name)
  */
-    __pyx_t_6 = __pyx_f_8pysproto_7_sproto__ensure_bytes(__pyx_v_tag_or_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 413, __pyx_L1_error)
+    __pyx_t_6 = __pyx_f_8pysproto_7_sproto__ensure_bytes(__pyx_v_tag_or_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 414, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_v_bt = ((PyObject*)__pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "pysproto/_sproto.pyx":414
+    /* "pysproto/_sproto.pyx":415
  *         elif isinstance(tag_or_name, (str, bytes)):
  *             bt = _ensure_bytes(tag_or_name)
  *             name = <const char*>bt             # <<<<<<<<<<<<<<
@@ -6809,12 +6818,12 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  */
     if (unlikely(__pyx_v_bt == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "expected bytes, NoneType found");
-      __PYX_ERR(0, 414, __pyx_L1_error)
+      __PYX_ERR(0, 415, __pyx_L1_error)
     }
-    __pyx_t_8 = __Pyx_PyBytes_AsString(__pyx_v_bt); if (unlikely((!__pyx_t_8) && PyErr_Occurred())) __PYX_ERR(0, 414, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyBytes_AsString(__pyx_v_bt); if (unlikely((!__pyx_t_8) && PyErr_Occurred())) __PYX_ERR(0, 415, __pyx_L1_error)
     __pyx_v_name = ((char const *)__pyx_t_8);
 
-    /* "pysproto/_sproto.pyx":415
+    /* "pysproto/_sproto.pyx":416
  *             bt = _ensure_bytes(tag_or_name)
  *             name = <const char*>bt
  *             tag = sproto.sproto_prototag(self.sp, name)             # <<<<<<<<<<<<<<
@@ -6823,7 +6832,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  */
     __pyx_v_tag = sproto_prototag(__pyx_v_self->sp, __pyx_v_name);
 
-    /* "pysproto/_sproto.pyx":416
+    /* "pysproto/_sproto.pyx":417
  *             name = <const char*>bt
  *             tag = sproto.sproto_prototag(self.sp, name)
  *             if tag < 0:             # <<<<<<<<<<<<<<
@@ -6833,7 +6842,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
     __pyx_t_1 = ((__pyx_v_tag < 0) != 0);
     if (__pyx_t_1) {
 
-      /* "pysproto/_sproto.pyx":417
+      /* "pysproto/_sproto.pyx":418
  *             tag = sproto.sproto_prototag(self.sp, name)
  *             if tag < 0:
  *                 return None             # <<<<<<<<<<<<<<
@@ -6844,7 +6853,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
       __pyx_r = Py_None; __Pyx_INCREF(Py_None);
       goto __pyx_L0;
 
-      /* "pysproto/_sproto.pyx":416
+      /* "pysproto/_sproto.pyx":417
  *             name = <const char*>bt
  *             tag = sproto.sproto_prototag(self.sp, name)
  *             if tag < 0:             # <<<<<<<<<<<<<<
@@ -6853,19 +6862,19 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  */
     }
 
-    /* "pysproto/_sproto.pyx":418
+    /* "pysproto/_sproto.pyx":419
  *             if tag < 0:
  *                 return None
  *             ret1  = PyLong_FromLong(<int>tag)             # <<<<<<<<<<<<<<
  *         request = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_REQUEST)
  *         if request == NULL:
  */
-    __pyx_t_6 = PyLong_FromLong(((int)__pyx_v_tag)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 418, __pyx_L1_error)
+    __pyx_t_6 = PyLong_FromLong(((int)__pyx_v_tag)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 419, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_v_ret1 = __pyx_t_6;
     __pyx_t_6 = 0;
 
-    /* "pysproto/_sproto.pyx":412
+    /* "pysproto/_sproto.pyx":413
  *                 return None
  *             ret1  = (<bytes>name).decode()
  *         elif isinstance(tag_or_name, (str, bytes)):             # <<<<<<<<<<<<<<
@@ -6875,7 +6884,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   }
   __pyx_L3:;
 
-  /* "pysproto/_sproto.pyx":419
+  /* "pysproto/_sproto.pyx":420
  *                 return None
  *             ret1  = PyLong_FromLong(<int>tag)
  *         request = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_REQUEST)             # <<<<<<<<<<<<<<
@@ -6884,7 +6893,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  */
   __pyx_v_request = sproto_protoquery(__pyx_v_self->sp, __pyx_v_tag, SPROTO_REQUEST);
 
-  /* "pysproto/_sproto.pyx":420
+  /* "pysproto/_sproto.pyx":421
  *             ret1  = PyLong_FromLong(<int>tag)
  *         request = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_REQUEST)
  *         if request == NULL:             # <<<<<<<<<<<<<<
@@ -6894,7 +6903,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   __pyx_t_1 = ((__pyx_v_request == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pysproto/_sproto.pyx":421
+    /* "pysproto/_sproto.pyx":422
  *         request = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_REQUEST)
  *         if request == NULL:
  *             ret2 = None             # <<<<<<<<<<<<<<
@@ -6904,7 +6913,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
     __Pyx_INCREF(Py_None);
     __pyx_v_ret2 = Py_None;
 
-    /* "pysproto/_sproto.pyx":420
+    /* "pysproto/_sproto.pyx":421
  *             ret1  = PyLong_FromLong(<int>tag)
  *         request = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_REQUEST)
  *         if request == NULL:             # <<<<<<<<<<<<<<
@@ -6914,7 +6923,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
     goto __pyx_L8;
   }
 
-  /* "pysproto/_sproto.pyx":423
+  /* "pysproto/_sproto.pyx":424
  *             ret2 = None
  *         else:
  *             ret2 = SprotoType.from_ptr(request)             # <<<<<<<<<<<<<<
@@ -6922,14 +6931,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  *         if response == NULL:
  */
   /*else*/ {
-    __pyx_t_6 = ((PyObject *)__pyx_f_8pysproto_7_sproto_10SprotoType_from_ptr(__pyx_v_request)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 423, __pyx_L1_error)
+    __pyx_t_6 = ((PyObject *)__pyx_f_8pysproto_7_sproto_10SprotoType_from_ptr(__pyx_v_request)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 424, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_v_ret2 = __pyx_t_6;
     __pyx_t_6 = 0;
   }
   __pyx_L8:;
 
-  /* "pysproto/_sproto.pyx":424
+  /* "pysproto/_sproto.pyx":425
  *         else:
  *             ret2 = SprotoType.from_ptr(request)
  *         response = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_RESPONSE)             # <<<<<<<<<<<<<<
@@ -6938,7 +6947,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  */
   __pyx_v_response = sproto_protoquery(__pyx_v_self->sp, __pyx_v_tag, SPROTO_RESPONSE);
 
-  /* "pysproto/_sproto.pyx":425
+  /* "pysproto/_sproto.pyx":426
  *             ret2 = SprotoType.from_ptr(request)
  *         response = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_RESPONSE)
  *         if response == NULL:             # <<<<<<<<<<<<<<
@@ -6948,7 +6957,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   __pyx_t_1 = ((__pyx_v_response == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pysproto/_sproto.pyx":426
+    /* "pysproto/_sproto.pyx":427
  *         response = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_RESPONSE)
  *         if response == NULL:
  *             ret3 = None             # <<<<<<<<<<<<<<
@@ -6958,7 +6967,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
     __Pyx_INCREF(Py_None);
     __pyx_v_ret3 = Py_None;
 
-    /* "pysproto/_sproto.pyx":425
+    /* "pysproto/_sproto.pyx":426
  *             ret2 = SprotoType.from_ptr(request)
  *         response = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_RESPONSE)
  *         if response == NULL:             # <<<<<<<<<<<<<<
@@ -6968,7 +6977,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
     goto __pyx_L9;
   }
 
-  /* "pysproto/_sproto.pyx":428
+  /* "pysproto/_sproto.pyx":429
  *             ret3 = None
  *         else:
  *             ret3 = SprotoType.from_ptr(response)             # <<<<<<<<<<<<<<
@@ -6976,14 +6985,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  * 
  */
   /*else*/ {
-    __pyx_t_6 = ((PyObject *)__pyx_f_8pysproto_7_sproto_10SprotoType_from_ptr(__pyx_v_response)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_6 = ((PyObject *)__pyx_f_8pysproto_7_sproto_10SprotoType_from_ptr(__pyx_v_response)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 429, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_v_ret3 = __pyx_t_6;
     __pyx_t_6 = 0;
   }
   __pyx_L9:;
 
-  /* "pysproto/_sproto.pyx":429
+  /* "pysproto/_sproto.pyx":430
  *         else:
  *             ret3 = SprotoType.from_ptr(response)
  *         return (ret1, ret2, ret3)             # <<<<<<<<<<<<<<
@@ -6991,8 +7000,8 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
  *     cpdef inline int sproto_protoresponse(self, int proto):
  */
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_ret1)) { __Pyx_RaiseUnboundLocalError("ret1"); __PYX_ERR(0, 429, __pyx_L1_error) }
-  __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 429, __pyx_L1_error)
+  if (unlikely(!__pyx_v_ret1)) { __Pyx_RaiseUnboundLocalError("ret1"); __PYX_ERR(0, 430, __pyx_L1_error) }
+  __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 430, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_INCREF(__pyx_v_ret1);
   __Pyx_GIVEREF(__pyx_v_ret1);
@@ -7007,7 +7016,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_6Sproto_protocol(struc
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "pysproto/_sproto.pyx":398
+  /* "pysproto/_sproto.pyx":399
  *             return SprotoType.from_ptr(st)
  * 
  *     cpdef inline object protocol(self, tag_or_name):             # <<<<<<<<<<<<<<
@@ -7054,7 +7063,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_8protocol(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("protocol", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_8pysproto_7_sproto_6Sproto_protocol(__pyx_v_self, __pyx_v_tag_or_name, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 398, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_8pysproto_7_sproto_6Sproto_protocol(__pyx_v_self, __pyx_v_tag_or_name, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 399, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7071,7 +7080,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_8protocol(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "pysproto/_sproto.pyx":431
+/* "pysproto/_sproto.pyx":432
  *         return (ret1, ret2, ret3)
  * 
  *     cpdef inline int sproto_protoresponse(self, int proto):             # <<<<<<<<<<<<<<
@@ -7085,7 +7094,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_6Sproto_sproto_protoresponse
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("sproto_protoresponse", 0);
 
-  /* "pysproto/_sproto.pyx":432
+  /* "pysproto/_sproto.pyx":433
  * 
  *     cpdef inline int sproto_protoresponse(self, int proto):
  *         return sproto.sproto_protoresponse(self.sp, proto)             # <<<<<<<<<<<<<<
@@ -7095,7 +7104,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_6Sproto_sproto_protoresponse
   __pyx_r = sproto_protoresponse(__pyx_v_self->sp, __pyx_v_proto);
   goto __pyx_L0;
 
-  /* "pysproto/_sproto.pyx":431
+  /* "pysproto/_sproto.pyx":432
  *         return (ret1, ret2, ret3)
  * 
  *     cpdef inline int sproto_protoresponse(self, int proto):             # <<<<<<<<<<<<<<
@@ -7121,7 +7130,7 @@ static PyObject *__pyx_pw_8pysproto_7_sproto_6Sproto_11sproto_protoresponse(PyOb
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("sproto_protoresponse (wrapper)", 0);
   assert(__pyx_arg_proto); {
-    __pyx_v_proto = __Pyx_PyInt_As_int(__pyx_arg_proto); if (unlikely((__pyx_v_proto == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 431, __pyx_L3_error)
+    __pyx_v_proto = __Pyx_PyInt_As_int(__pyx_arg_proto); if (unlikely((__pyx_v_proto == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 432, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -7145,7 +7154,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_10sproto_protoresponse(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("sproto_protoresponse", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_8pysproto_7_sproto_6Sproto_sproto_protoresponse(__pyx_v_self, __pyx_v_proto, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 431, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_8pysproto_7_sproto_6Sproto_sproto_protoresponse(__pyx_v_self, __pyx_v_proto, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 432, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7277,7 +7286,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6Sproto_14__setstate_cython__(CYTHO
   return __pyx_r;
 }
 
-/* "pysproto/_sproto.pyx":434
+/* "pysproto/_sproto.pyx":435
  *         return sproto.sproto_protoresponse(self.sp, proto)
  * 
  * cpdef inline int pack_into(const uint8_t[::1] inp, uint8_t[::1] out):             # <<<<<<<<<<<<<<
@@ -7304,7 +7313,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("pack_into", 0);
 
-  /* "pysproto/_sproto.pyx":436
+  /* "pysproto/_sproto.pyx":437
  * cpdef inline int pack_into(const uint8_t[::1] inp, uint8_t[::1] out):
  *     cdef:
  *         size_t sz = <size_t>inp.shape[0]             # <<<<<<<<<<<<<<
@@ -7313,7 +7322,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
  */
   __pyx_v_sz = ((size_t)(__pyx_v_inp.shape[0]));
 
-  /* "pysproto/_sproto.pyx":437
+  /* "pysproto/_sproto.pyx":438
  *     cdef:
  *         size_t sz = <size_t>inp.shape[0]
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2             # <<<<<<<<<<<<<<
@@ -7322,7 +7331,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
  */
   __pyx_v_maxsz = (((((__pyx_v_sz + 0x7FF) / 0x800) * 2) + __pyx_v_sz) + 2);
 
-  /* "pysproto/_sproto.pyx":438
+  /* "pysproto/_sproto.pyx":439
  *         size_t sz = <size_t>inp.shape[0]
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
  *     if <size_t>out.shape[0] < maxsz:             # <<<<<<<<<<<<<<
@@ -7332,14 +7341,14 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
   __pyx_t_1 = ((((size_t)(__pyx_v_out.shape[0])) < __pyx_v_maxsz) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pysproto/_sproto.pyx":439
+    /* "pysproto/_sproto.pyx":440
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
  *     if <size_t>out.shape[0] < maxsz:
  *         raise SprotoError("output buffer is too small")             # <<<<<<<<<<<<<<
  *     cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)
  *     if <size_t>ret > maxsz:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 439, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 440, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -7353,14 +7362,14 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
     }
     __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_kp_u_output_buffer_is_too_small) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_u_output_buffer_is_too_small);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 439, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 440, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 439, __pyx_L1_error)
+    __PYX_ERR(0, 440, __pyx_L1_error)
 
-    /* "pysproto/_sproto.pyx":438
+    /* "pysproto/_sproto.pyx":439
  *         size_t sz = <size_t>inp.shape[0]
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
  *     if <size_t>out.shape[0] < maxsz:             # <<<<<<<<<<<<<<
@@ -7369,7 +7378,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
  */
   }
 
-  /* "pysproto/_sproto.pyx":440
+  /* "pysproto/_sproto.pyx":441
  *     if <size_t>out.shape[0] < maxsz:
  *         raise SprotoError("output buffer is too small")
  *     cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)             # <<<<<<<<<<<<<<
@@ -7380,7 +7389,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
   __pyx_t_6 = 0;
   __pyx_v_ret = sproto_pack(((void *)(&(*((uint8_t const  *) ( /* dim=0 */ ((char *) (((uint8_t const  *) __pyx_v_inp.data) + __pyx_t_5)) ))))), ((int)(__pyx_v_inp.shape[0])), ((void *)(&(*((uint8_t *) ( /* dim=0 */ ((char *) (((uint8_t *) __pyx_v_out.data) + __pyx_t_6)) ))))), ((int)__pyx_v_maxsz));
 
-  /* "pysproto/_sproto.pyx":441
+  /* "pysproto/_sproto.pyx":442
  *         raise SprotoError("output buffer is too small")
  *     cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)
  *     if <size_t>ret > maxsz:             # <<<<<<<<<<<<<<
@@ -7390,18 +7399,18 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
   __pyx_t_1 = ((((size_t)__pyx_v_ret) > __pyx_v_maxsz) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pysproto/_sproto.pyx":442
+    /* "pysproto/_sproto.pyx":443
  *     cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)
  *     if <size_t>ret > maxsz:
  *         raise SprotoError("packing error, return size = %d" % ret)             # <<<<<<<<<<<<<<
  *     return ret
  * 
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 442, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_ret); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 442, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_ret); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = PyUnicode_Format(__pyx_kp_u_packing_error_return_size_d, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 442, __pyx_L1_error)
+    __pyx_t_7 = PyUnicode_Format(__pyx_kp_u_packing_error_return_size_d, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = NULL;
@@ -7417,14 +7426,14 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
     __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_7);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 442, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 442, __pyx_L1_error)
+    __PYX_ERR(0, 443, __pyx_L1_error)
 
-    /* "pysproto/_sproto.pyx":441
+    /* "pysproto/_sproto.pyx":442
  *         raise SprotoError("output buffer is too small")
  *     cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)
  *     if <size_t>ret > maxsz:             # <<<<<<<<<<<<<<
@@ -7433,7 +7442,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
  */
   }
 
-  /* "pysproto/_sproto.pyx":443
+  /* "pysproto/_sproto.pyx":444
  *     if <size_t>ret > maxsz:
  *         raise SprotoError("packing error, return size = %d" % ret)
  *     return ret             # <<<<<<<<<<<<<<
@@ -7443,7 +7452,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_pack_into(__Pyx_memviewslice
   __pyx_r = __pyx_v_ret;
   goto __pyx_L0;
 
-  /* "pysproto/_sproto.pyx":434
+  /* "pysproto/_sproto.pyx":435
  *         return sproto.sproto_protoresponse(self.sp, proto)
  * 
  * cpdef inline int pack_into(const uint8_t[::1] inp, uint8_t[::1] out):             # <<<<<<<<<<<<<<
@@ -7499,11 +7508,11 @@ static PyObject *__pyx_pw_8pysproto_7_sproto_1pack_into(PyObject *__pyx_self, Py
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_out)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("pack_into", 1, 2, 2, 1); __PYX_ERR(0, 434, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("pack_into", 1, 2, 2, 1); __PYX_ERR(0, 435, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "pack_into") < 0)) __PYX_ERR(0, 434, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "pack_into") < 0)) __PYX_ERR(0, 435, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -7511,12 +7520,12 @@ static PyObject *__pyx_pw_8pysproto_7_sproto_1pack_into(PyObject *__pyx_self, Py
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(values[0], 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 434, __pyx_L3_error)
-    __pyx_v_out = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_out.memview)) __PYX_ERR(0, 434, __pyx_L3_error)
+    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(values[0], 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 435, __pyx_L3_error)
+    __pyx_v_out = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_out.memview)) __PYX_ERR(0, 435, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("pack_into", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 434, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("pack_into", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 435, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pysproto._sproto.pack_into", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7538,9 +7547,9 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_pack_into(CYTHON_UNUSED PyObject *_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("pack_into", 0);
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 434, __pyx_L1_error) }
-  if (unlikely(!__pyx_v_out.memview)) { __Pyx_RaiseUnboundLocalError("out"); __PYX_ERR(0, 434, __pyx_L1_error) }
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_8pysproto_7_sproto_pack_into(__pyx_v_inp, __pyx_v_out, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 434, __pyx_L1_error)
+  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 435, __pyx_L1_error) }
+  if (unlikely(!__pyx_v_out.memview)) { __Pyx_RaiseUnboundLocalError("out"); __PYX_ERR(0, 435, __pyx_L1_error) }
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_8pysproto_7_sproto_pack_into(__pyx_v_inp, __pyx_v_out, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 435, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7559,7 +7568,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_pack_into(CYTHON_UNUSED PyObject *_
   return __pyx_r;
 }
 
-/* "pysproto/_sproto.pyx":446
+/* "pysproto/_sproto.pyx":447
  * 
  * 
  * cpdef inline bytes pack(const uint8_t[::1] inp):             # <<<<<<<<<<<<<<
@@ -7587,7 +7596,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("pack", 0);
 
-  /* "pysproto/_sproto.pyx":448
+  /* "pysproto/_sproto.pyx":449
  * cpdef inline bytes pack(const uint8_t[::1] inp):
  *     cdef:
  *         size_t sz = <size_t> inp.shape[0]             # <<<<<<<<<<<<<<
@@ -7596,7 +7605,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
  */
   __pyx_v_sz = ((size_t)(__pyx_v_inp.shape[0]));
 
-  /* "pysproto/_sproto.pyx":449
+  /* "pysproto/_sproto.pyx":450
  *     cdef:
  *         size_t sz = <size_t> inp.shape[0]
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2             # <<<<<<<<<<<<<<
@@ -7605,7 +7614,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
  */
   __pyx_v_maxsz = (((((__pyx_v_sz + 0x7FF) / 0x800) * 2) + __pyx_v_sz) + 2);
 
-  /* "pysproto/_sproto.pyx":450
+  /* "pysproto/_sproto.pyx":451
  *         size_t sz = <size_t> inp.shape[0]
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
  *     cdef void* out = PyMem_Malloc(maxsz)             # <<<<<<<<<<<<<<
@@ -7614,7 +7623,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
  */
   __pyx_v_out = PyMem_Malloc(__pyx_v_maxsz);
 
-  /* "pysproto/_sproto.pyx":451
+  /* "pysproto/_sproto.pyx":452
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
  *     cdef void* out = PyMem_Malloc(maxsz)
  *     if out == NULL:             # <<<<<<<<<<<<<<
@@ -7624,16 +7633,16 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
   __pyx_t_1 = ((__pyx_v_out == NULL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pysproto/_sproto.pyx":452
+    /* "pysproto/_sproto.pyx":453
  *     cdef void* out = PyMem_Malloc(maxsz)
  *     if out == NULL:
  *         raise MemoryError             # <<<<<<<<<<<<<<
  *     cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)
  *     if <size_t>ret > maxsz:
  */
-    PyErr_NoMemory(); __PYX_ERR(0, 452, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 453, __pyx_L1_error)
 
-    /* "pysproto/_sproto.pyx":451
+    /* "pysproto/_sproto.pyx":452
  *         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
  *     cdef void* out = PyMem_Malloc(maxsz)
  *     if out == NULL:             # <<<<<<<<<<<<<<
@@ -7642,7 +7651,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
  */
   }
 
-  /* "pysproto/_sproto.pyx":453
+  /* "pysproto/_sproto.pyx":454
  *     if out == NULL:
  *         raise MemoryError
  *     cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)             # <<<<<<<<<<<<<<
@@ -7652,7 +7661,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
   __pyx_t_2 = 0;
   __pyx_v_ret = sproto_pack(((void *)(&(*((uint8_t const  *) ( /* dim=0 */ ((char *) (((uint8_t const  *) __pyx_v_inp.data) + __pyx_t_2)) ))))), ((int)(__pyx_v_inp.shape[0])), __pyx_v_out, ((int)__pyx_v_maxsz));
 
-  /* "pysproto/_sproto.pyx":454
+  /* "pysproto/_sproto.pyx":455
  *         raise MemoryError
  *     cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)
  *     if <size_t>ret > maxsz:             # <<<<<<<<<<<<<<
@@ -7662,18 +7671,18 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
   __pyx_t_1 = ((((size_t)__pyx_v_ret) > __pyx_v_maxsz) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pysproto/_sproto.pyx":455
+    /* "pysproto/_sproto.pyx":456
  *     cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)
  *     if <size_t>ret > maxsz:
  *         raise SprotoError("packing error, return size = %d" % ret)             # <<<<<<<<<<<<<<
  *     bt = <bytes>((<uint8_t*>out)[:ret])
  *     PyMem_Free(out)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 455, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_ret); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 455, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_ret); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyUnicode_Format(__pyx_kp_u_packing_error_return_size_d, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 455, __pyx_L1_error)
+    __pyx_t_6 = PyUnicode_Format(__pyx_kp_u_packing_error_return_size_d, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_5 = NULL;
@@ -7689,14 +7698,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
     __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 455, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 456, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 455, __pyx_L1_error)
+    __PYX_ERR(0, 456, __pyx_L1_error)
 
-    /* "pysproto/_sproto.pyx":454
+    /* "pysproto/_sproto.pyx":455
  *         raise MemoryError
  *     cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)
  *     if <size_t>ret > maxsz:             # <<<<<<<<<<<<<<
@@ -7705,14 +7714,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
  */
   }
 
-  /* "pysproto/_sproto.pyx":456
+  /* "pysproto/_sproto.pyx":457
  *     if <size_t>ret > maxsz:
  *         raise SprotoError("packing error, return size = %d" % ret)
  *     bt = <bytes>((<uint8_t*>out)[:ret])             # <<<<<<<<<<<<<<
  *     PyMem_Free(out)
  *     return bt
  */
-  __pyx_t_3 = __Pyx_PyBytes_FromStringAndSize(((const char*)((uint8_t *)__pyx_v_out)) + 0, __pyx_v_ret - 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 456, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyBytes_FromStringAndSize(((const char*)((uint8_t *)__pyx_v_out)) + 0, __pyx_v_ret - 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 457, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = __pyx_t_3;
   __Pyx_INCREF(__pyx_t_4);
@@ -7720,7 +7729,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
   __pyx_v_bt = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "pysproto/_sproto.pyx":457
+  /* "pysproto/_sproto.pyx":458
  *         raise SprotoError("packing error, return size = %d" % ret)
  *     bt = <bytes>((<uint8_t*>out)[:ret])
  *     PyMem_Free(out)             # <<<<<<<<<<<<<<
@@ -7729,7 +7738,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
  */
   PyMem_Free(__pyx_v_out);
 
-  /* "pysproto/_sproto.pyx":458
+  /* "pysproto/_sproto.pyx":459
  *     bt = <bytes>((<uint8_t*>out)[:ret])
  *     PyMem_Free(out)
  *     return bt             # <<<<<<<<<<<<<<
@@ -7741,7 +7750,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_pack(__Pyx_memviewslic
   __pyx_r = __pyx_v_bt;
   goto __pyx_L0;
 
-  /* "pysproto/_sproto.pyx":446
+  /* "pysproto/_sproto.pyx":447
  * 
  * 
  * cpdef inline bytes pack(const uint8_t[::1] inp):             # <<<<<<<<<<<<<<
@@ -7776,7 +7785,7 @@ static PyObject *__pyx_pw_8pysproto_7_sproto_3pack(PyObject *__pyx_self, PyObjec
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("pack (wrapper)", 0);
   assert(__pyx_arg_inp); {
-    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(__pyx_arg_inp, 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 446, __pyx_L3_error)
+    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(__pyx_arg_inp, 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 447, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -7800,8 +7809,8 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_2pack(CYTHON_UNUSED PyObject *__pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("pack", 0);
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 446, __pyx_L1_error) }
-  __pyx_t_1 = __pyx_f_8pysproto_7_sproto_pack(__pyx_v_inp, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 446, __pyx_L1_error)
+  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 447, __pyx_L1_error) }
+  __pyx_t_1 = __pyx_f_8pysproto_7_sproto_pack(__pyx_v_inp, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 447, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7819,7 +7828,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_2pack(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 
-/* "pysproto/_sproto.pyx":461
+/* "pysproto/_sproto.pyx":462
  * 
  * 
  * cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out):             # <<<<<<<<<<<<<<
@@ -7843,7 +7852,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_unpack_into(__Pyx_memviewsli
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("unpack_into", 0);
 
-  /* "pysproto/_sproto.pyx":462
+  /* "pysproto/_sproto.pyx":463
  * 
  * cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out):
  *     cdef int ret =  sproto.sproto_unpack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>out.shape[0])             # <<<<<<<<<<<<<<
@@ -7854,7 +7863,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_unpack_into(__Pyx_memviewsli
   __pyx_t_2 = 0;
   __pyx_v_ret = sproto_unpack(((void *)(&(*((uint8_t const  *) ( /* dim=0 */ ((char *) (((uint8_t const  *) __pyx_v_inp.data) + __pyx_t_1)) ))))), ((int)(__pyx_v_inp.shape[0])), ((void *)(&(*((uint8_t *) ( /* dim=0 */ ((char *) (((uint8_t *) __pyx_v_out.data) + __pyx_t_2)) ))))), ((int)(__pyx_v_out.shape[0])));
 
-  /* "pysproto/_sproto.pyx":463
+  /* "pysproto/_sproto.pyx":464
  * cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out):
  *     cdef int ret =  sproto.sproto_unpack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>out.shape[0])
  *     if ret < 0:             # <<<<<<<<<<<<<<
@@ -7864,14 +7873,14 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_unpack_into(__Pyx_memviewsli
   __pyx_t_3 = ((__pyx_v_ret < 0) != 0);
   if (unlikely(__pyx_t_3)) {
 
-    /* "pysproto/_sproto.pyx":464
+    /* "pysproto/_sproto.pyx":465
  *     cdef int ret =  sproto.sproto_unpack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>out.shape[0])
  *     if ret < 0:
  *         raise SprotoError("Invalid unpack stream")             # <<<<<<<<<<<<<<
  *     return ret
  * 
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 464, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 465, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -7885,14 +7894,14 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_unpack_into(__Pyx_memviewsli
     }
     __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_kp_u_Invalid_unpack_stream) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_kp_u_Invalid_unpack_stream);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 464, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 465, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 464, __pyx_L1_error)
+    __PYX_ERR(0, 465, __pyx_L1_error)
 
-    /* "pysproto/_sproto.pyx":463
+    /* "pysproto/_sproto.pyx":464
  * cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out):
  *     cdef int ret =  sproto.sproto_unpack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>out.shape[0])
  *     if ret < 0:             # <<<<<<<<<<<<<<
@@ -7901,7 +7910,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_unpack_into(__Pyx_memviewsli
  */
   }
 
-  /* "pysproto/_sproto.pyx":465
+  /* "pysproto/_sproto.pyx":466
  *     if ret < 0:
  *         raise SprotoError("Invalid unpack stream")
  *     return ret             # <<<<<<<<<<<<<<
@@ -7911,7 +7920,7 @@ static CYTHON_INLINE int __pyx_f_8pysproto_7_sproto_unpack_into(__Pyx_memviewsli
   __pyx_r = __pyx_v_ret;
   goto __pyx_L0;
 
-  /* "pysproto/_sproto.pyx":461
+  /* "pysproto/_sproto.pyx":462
  * 
  * 
  * cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out):             # <<<<<<<<<<<<<<
@@ -7966,11 +7975,11 @@ static PyObject *__pyx_pw_8pysproto_7_sproto_5unpack_into(PyObject *__pyx_self, 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_out)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("unpack_into", 1, 2, 2, 1); __PYX_ERR(0, 461, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("unpack_into", 1, 2, 2, 1); __PYX_ERR(0, 462, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "unpack_into") < 0)) __PYX_ERR(0, 461, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "unpack_into") < 0)) __PYX_ERR(0, 462, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -7978,12 +7987,12 @@ static PyObject *__pyx_pw_8pysproto_7_sproto_5unpack_into(PyObject *__pyx_self, 
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(values[0], 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 461, __pyx_L3_error)
-    __pyx_v_out = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_out.memview)) __PYX_ERR(0, 461, __pyx_L3_error)
+    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(values[0], 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 462, __pyx_L3_error)
+    __pyx_v_out = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_out.memview)) __PYX_ERR(0, 462, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("unpack_into", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 461, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("unpack_into", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 462, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pysproto._sproto.unpack_into", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -8005,9 +8014,9 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_4unpack_into(CYTHON_UNUSED PyObject
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("unpack_into", 0);
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 461, __pyx_L1_error) }
-  if (unlikely(!__pyx_v_out.memview)) { __Pyx_RaiseUnboundLocalError("out"); __PYX_ERR(0, 461, __pyx_L1_error) }
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_8pysproto_7_sproto_unpack_into(__pyx_v_inp, __pyx_v_out, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 461, __pyx_L1_error)
+  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 462, __pyx_L1_error) }
+  if (unlikely(!__pyx_v_out.memview)) { __Pyx_RaiseUnboundLocalError("out"); __PYX_ERR(0, 462, __pyx_L1_error) }
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_8pysproto_7_sproto_unpack_into(__pyx_v_inp, __pyx_v_out, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 462, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -8026,7 +8035,7 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_4unpack_into(CYTHON_UNUSED PyObject
   return __pyx_r;
 }
 
-/* "pysproto/_sproto.pyx":468
+/* "pysproto/_sproto.pyx":469
  * 
  * 
  * cpdef inline bytes unpack(const uint8_t[::1] inp):             # <<<<<<<<<<<<<<
@@ -8052,7 +8061,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("unpack", 0);
 
-  /* "pysproto/_sproto.pyx":469
+  /* "pysproto/_sproto.pyx":470
  * 
  * cpdef inline bytes unpack(const uint8_t[::1] inp):
  *     cdef void * out = PyMem_Malloc(<size_t>sproto.ENCODE_BUFFERSIZE)             # <<<<<<<<<<<<<<
@@ -8061,7 +8070,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
   __pyx_v_out = PyMem_Malloc(((size_t)ENCODE_BUFFERSIZE));
 
-  /* "pysproto/_sproto.pyx":470
+  /* "pysproto/_sproto.pyx":471
  * cpdef inline bytes unpack(const uint8_t[::1] inp):
  *     cdef void * out = PyMem_Malloc(<size_t>sproto.ENCODE_BUFFERSIZE)
  *     if out == NULL:             # <<<<<<<<<<<<<<
@@ -8071,16 +8080,16 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
   __pyx_t_1 = ((__pyx_v_out == NULL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pysproto/_sproto.pyx":471
+    /* "pysproto/_sproto.pyx":472
  *     cdef void * out = PyMem_Malloc(<size_t>sproto.ENCODE_BUFFERSIZE)
  *     if out == NULL:
  *         raise MemoryError             # <<<<<<<<<<<<<<
  *     cdef int osz = sproto.ENCODE_BUFFERSIZE
  *     cdef int ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  */
-    PyErr_NoMemory(); __PYX_ERR(0, 471, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 472, __pyx_L1_error)
 
-    /* "pysproto/_sproto.pyx":470
+    /* "pysproto/_sproto.pyx":471
  * cpdef inline bytes unpack(const uint8_t[::1] inp):
  *     cdef void * out = PyMem_Malloc(<size_t>sproto.ENCODE_BUFFERSIZE)
  *     if out == NULL:             # <<<<<<<<<<<<<<
@@ -8089,7 +8098,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
   }
 
-  /* "pysproto/_sproto.pyx":472
+  /* "pysproto/_sproto.pyx":473
  *     if out == NULL:
  *         raise MemoryError
  *     cdef int osz = sproto.ENCODE_BUFFERSIZE             # <<<<<<<<<<<<<<
@@ -8098,7 +8107,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
   __pyx_v_osz = ENCODE_BUFFERSIZE;
 
-  /* "pysproto/_sproto.pyx":473
+  /* "pysproto/_sproto.pyx":474
  *         raise MemoryError
  *     cdef int osz = sproto.ENCODE_BUFFERSIZE
  *     cdef int ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)             # <<<<<<<<<<<<<<
@@ -8108,7 +8117,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
   __pyx_t_2 = 0;
   __pyx_v_ret = sproto_unpack(((void *)(&(*((uint8_t const  *) ( /* dim=0 */ ((char *) (((uint8_t const  *) __pyx_v_inp.data) + __pyx_t_2)) ))))), ((int)(__pyx_v_inp.shape[0])), __pyx_v_out, __pyx_v_osz);
 
-  /* "pysproto/_sproto.pyx":474
+  /* "pysproto/_sproto.pyx":475
  *     cdef int osz = sproto.ENCODE_BUFFERSIZE
  *     cdef int ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  *     if ret < 0:             # <<<<<<<<<<<<<<
@@ -8118,14 +8127,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
   __pyx_t_1 = ((__pyx_v_ret < 0) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pysproto/_sproto.pyx":475
+    /* "pysproto/_sproto.pyx":476
  *     cdef int ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  *     if ret < 0:
  *         raise SprotoError("Invalid unpack stream")             # <<<<<<<<<<<<<<
  *     if ret > osz:
  *         out = PyMem_Realloc(out, <size_t>ret)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 475, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 476, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8139,14 +8148,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
     }
     __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_kp_u_Invalid_unpack_stream) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_kp_u_Invalid_unpack_stream);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 475, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 476, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 475, __pyx_L1_error)
+    __PYX_ERR(0, 476, __pyx_L1_error)
 
-    /* "pysproto/_sproto.pyx":474
+    /* "pysproto/_sproto.pyx":475
  *     cdef int osz = sproto.ENCODE_BUFFERSIZE
  *     cdef int ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  *     if ret < 0:             # <<<<<<<<<<<<<<
@@ -8155,7 +8164,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
   }
 
-  /* "pysproto/_sproto.pyx":476
+  /* "pysproto/_sproto.pyx":477
  *     if ret < 0:
  *         raise SprotoError("Invalid unpack stream")
  *     if ret > osz:             # <<<<<<<<<<<<<<
@@ -8165,7 +8174,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
   __pyx_t_1 = ((__pyx_v_ret > __pyx_v_osz) != 0);
   if (__pyx_t_1) {
 
-    /* "pysproto/_sproto.pyx":477
+    /* "pysproto/_sproto.pyx":478
  *         raise SprotoError("Invalid unpack stream")
  *     if ret > osz:
  *         out = PyMem_Realloc(out, <size_t>ret)             # <<<<<<<<<<<<<<
@@ -8174,7 +8183,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
     __pyx_v_out = PyMem_Realloc(__pyx_v_out, ((size_t)__pyx_v_ret));
 
-    /* "pysproto/_sproto.pyx":478
+    /* "pysproto/_sproto.pyx":479
  *     if ret > osz:
  *         out = PyMem_Realloc(out, <size_t>ret)
  *         if out == NULL:             # <<<<<<<<<<<<<<
@@ -8184,16 +8193,16 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
     __pyx_t_1 = ((__pyx_v_out == NULL) != 0);
     if (unlikely(__pyx_t_1)) {
 
-      /* "pysproto/_sproto.pyx":479
+      /* "pysproto/_sproto.pyx":480
  *         out = PyMem_Realloc(out, <size_t>ret)
  *         if out == NULL:
  *             raise MemoryError             # <<<<<<<<<<<<<<
  *         osz = ret
  *         ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  */
-      PyErr_NoMemory(); __PYX_ERR(0, 479, __pyx_L1_error)
+      PyErr_NoMemory(); __PYX_ERR(0, 480, __pyx_L1_error)
 
-      /* "pysproto/_sproto.pyx":478
+      /* "pysproto/_sproto.pyx":479
  *     if ret > osz:
  *         out = PyMem_Realloc(out, <size_t>ret)
  *         if out == NULL:             # <<<<<<<<<<<<<<
@@ -8202,7 +8211,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
     }
 
-    /* "pysproto/_sproto.pyx":480
+    /* "pysproto/_sproto.pyx":481
  *         if out == NULL:
  *             raise MemoryError
  *         osz = ret             # <<<<<<<<<<<<<<
@@ -8211,7 +8220,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
     __pyx_v_osz = __pyx_v_ret;
 
-    /* "pysproto/_sproto.pyx":481
+    /* "pysproto/_sproto.pyx":482
  *             raise MemoryError
  *         osz = ret
  *         ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)             # <<<<<<<<<<<<<<
@@ -8221,7 +8230,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
     __pyx_t_2 = 0;
     __pyx_v_ret = sproto_unpack(((void *)(&(*((uint8_t const  *) ( /* dim=0 */ ((char *) (((uint8_t const  *) __pyx_v_inp.data) + __pyx_t_2)) ))))), ((int)(__pyx_v_inp.shape[0])), __pyx_v_out, __pyx_v_osz);
 
-    /* "pysproto/_sproto.pyx":482
+    /* "pysproto/_sproto.pyx":483
  *         osz = ret
  *         ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  *         if ret < 0:             # <<<<<<<<<<<<<<
@@ -8231,14 +8240,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
     __pyx_t_1 = ((__pyx_v_ret < 0) != 0);
     if (unlikely(__pyx_t_1)) {
 
-      /* "pysproto/_sproto.pyx":483
+      /* "pysproto/_sproto.pyx":484
  *         ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  *         if ret < 0:
  *             raise SprotoError("Invalid unpack stream")             # <<<<<<<<<<<<<<
  *     bt = <bytes>((<uint8_t*>out)[:ret])
  *     PyMem_Free(out)
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 483, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_SprotoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_t_5 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -8252,14 +8261,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
       }
       __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_kp_u_Invalid_unpack_stream) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_kp_u_Invalid_unpack_stream);
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 483, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 484, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __PYX_ERR(0, 483, __pyx_L1_error)
+      __PYX_ERR(0, 484, __pyx_L1_error)
 
-      /* "pysproto/_sproto.pyx":482
+      /* "pysproto/_sproto.pyx":483
  *         osz = ret
  *         ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
  *         if ret < 0:             # <<<<<<<<<<<<<<
@@ -8268,7 +8277,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
     }
 
-    /* "pysproto/_sproto.pyx":476
+    /* "pysproto/_sproto.pyx":477
  *     if ret < 0:
  *         raise SprotoError("Invalid unpack stream")
  *     if ret > osz:             # <<<<<<<<<<<<<<
@@ -8277,14 +8286,14 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
   }
 
-  /* "pysproto/_sproto.pyx":484
+  /* "pysproto/_sproto.pyx":485
  *         if ret < 0:
  *             raise SprotoError("Invalid unpack stream")
  *     bt = <bytes>((<uint8_t*>out)[:ret])             # <<<<<<<<<<<<<<
  *     PyMem_Free(out)
  *     return bt
  */
-  __pyx_t_3 = __Pyx_PyBytes_FromStringAndSize(((const char*)((uint8_t *)__pyx_v_out)) + 0, __pyx_v_ret - 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 484, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyBytes_FromStringAndSize(((const char*)((uint8_t *)__pyx_v_out)) + 0, __pyx_v_ret - 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 485, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = __pyx_t_3;
   __Pyx_INCREF(__pyx_t_4);
@@ -8292,7 +8301,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
   __pyx_v_bt = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "pysproto/_sproto.pyx":485
+  /* "pysproto/_sproto.pyx":486
  *             raise SprotoError("Invalid unpack stream")
  *     bt = <bytes>((<uint8_t*>out)[:ret])
  *     PyMem_Free(out)             # <<<<<<<<<<<<<<
@@ -8300,7 +8309,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
  */
   PyMem_Free(__pyx_v_out);
 
-  /* "pysproto/_sproto.pyx":486
+  /* "pysproto/_sproto.pyx":487
  *     bt = <bytes>((<uint8_t*>out)[:ret])
  *     PyMem_Free(out)
  *     return bt             # <<<<<<<<<<<<<<
@@ -8310,7 +8319,7 @@ static CYTHON_INLINE PyObject *__pyx_f_8pysproto_7_sproto_unpack(__Pyx_memviewsl
   __pyx_r = __pyx_v_bt;
   goto __pyx_L0;
 
-  /* "pysproto/_sproto.pyx":468
+  /* "pysproto/_sproto.pyx":469
  * 
  * 
  * cpdef inline bytes unpack(const uint8_t[::1] inp):             # <<<<<<<<<<<<<<
@@ -8344,7 +8353,7 @@ static PyObject *__pyx_pw_8pysproto_7_sproto_7unpack(PyObject *__pyx_self, PyObj
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("unpack (wrapper)", 0);
   assert(__pyx_arg_inp); {
-    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(__pyx_arg_inp, 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 468, __pyx_L3_error)
+    __pyx_v_inp = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint8_t__const__(__pyx_arg_inp, 0); if (unlikely(!__pyx_v_inp.memview)) __PYX_ERR(0, 469, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -8368,8 +8377,8 @@ static PyObject *__pyx_pf_8pysproto_7_sproto_6unpack(CYTHON_UNUSED PyObject *__p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("unpack", 0);
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 468, __pyx_L1_error) }
-  __pyx_t_1 = __pyx_f_8pysproto_7_sproto_unpack(__pyx_v_inp, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 468, __pyx_L1_error)
+  if (unlikely(!__pyx_v_inp.memview)) { __Pyx_RaiseUnboundLocalError("inp"); __PYX_ERR(0, 469, __pyx_L1_error) }
+  __pyx_t_1 = __pyx_f_8pysproto_7_sproto_unpack(__pyx_v_inp, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 469, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;

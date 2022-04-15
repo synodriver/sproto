@@ -52,7 +52,7 @@ def main():
     version: str = get_version()
     dis = get_dis()
     setup(
-        name="pybase16384",
+        name="sproto",
         version=version,
         url="https://github.com/synodriver/sproto",
         packages=packages,
@@ -64,12 +64,11 @@ def main():
         author_email="diguohuangjiajinweijun@gmail.com",
         python_requires=">=3.6",
         install_requires=["cython"],
-        license='GPLv3',
+        license='BSD',
         classifiers=[
-            "Development Status :: 5 - Stable",
+            "Development Status :: 4 - Beta",
             "Operating System :: OS Independent",
-            "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-            "Topic :: Security :: Cryptography",
+            'License :: OSI Approved :: BSD License',
             "Programming Language :: C",
             "Programming Language :: Cython",
             "Programming Language :: Python",
