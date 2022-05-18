@@ -25,9 +25,9 @@ class TestSproto(TestCase):
 
     def test_pack_unpack(self):
         def test_pack_unpack_():
-            for i in range(1000):
+            for _ in range(1000):
                 length = randint(1, 1000)
-                data = bytes([randint(0, 255) for _ in range(length)])
+                data = bytes(randint(0, 255) for _ in range(length))
                 self.assertEqual(unpack(pack(data)).rstrip(b"\x00"), data.rstrip(b"\x00"))
 
         self._run_gc_test(test_pack_unpack_)
@@ -141,7 +141,6 @@ Person.PhoneNumber
         print(encoded)
         dt = tp.decode(encoded)
         print(dt)
-        pass
 
     def tearDown(self) -> None:
         pass

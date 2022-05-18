@@ -25,10 +25,12 @@ class build_ext_compiler_check(build_ext):
 
 
 extensions = [
-    Extension("pysproto._sproto", ["pysproto/_sproto.pyx", f'sproto/sproto.c'],
-              include_dirs=[f"./sproto"],
-              library_dirs=[f"./sproto"],
-              ),
+    Extension(
+        "pysproto._sproto",
+        ["pysproto/_sproto.pyx", 'sproto/sproto.c'],
+        include_dirs=["./sproto"],
+        library_dirs=["./sproto"],
+    )
 ]
 
 

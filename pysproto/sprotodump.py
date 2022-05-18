@@ -10,9 +10,7 @@ import pysproto.sprotoparser as sprotoparser
 
 
 def ensure_bytes(data) -> bytes:
-    if isinstance(data, str):
-        return data.encode()
-    return bytes(data)
+    return data.encode() if isinstance(data, str) else bytes(data)
 
 
 def packbytes(s: Union[bytes, str]) -> bytes:
@@ -38,17 +36,16 @@ def packfield(f):
     else:
         strtbl.write(b"\4\0")
     strtbl.write(b"\0\0")
-    if f["builtin"] != None:
+    if f["builtin"] is None:
+        strtbl.write(b"\1\0")
+        strtbl.write(packvalue(f["type"]))
+    else:
         strtbl.write(packvalue(f["builtin"]))
         if f.get("extra", None):
             strtbl.write(packvalue(f["extra"]))
         else:
             strtbl.write(b"\1\0")
-        strtbl.write(packvalue(f["tag"]))
-    else:
-        strtbl.write(b"\1\0")
-        strtbl.write(packvalue(f["type"]))
-        strtbl.write(packvalue(f["tag"]))
+    strtbl.write(packvalue(f["tag"]))
     if f["array"]:
         strtbl.write(packvalue(1))
         if f["key"]:
@@ -74,8 +71,8 @@ def packtype(name, t, alltypes):
 
         if tname == "binary":
             tmp["extra"] = 1
-        if tmp["builtin"] == None:
-            assert alltypes[tname], "type %s not exists" % tname
+        if tmp["builtin"] is None:
+            assert alltypes[tname], f"type {tname} not exists"
             subtype = alltypes[tname]
             tmp["type"] = subtype["id"]
         else:
@@ -91,14 +88,17 @@ def packtype(name, t, alltypes):
                     if t["tag"] < min_t:
                         min_t = t["tag"]
                         f["key"] = n
-                assert c == 2, "Invalid map definition: %s, must only have two fields" % tmp["name"]
+                assert (
+                    c == 2
+                ), f'Invalid map definition: {tmp["name"]}, must only have two fields'
+
             stfield = subtype["fields"].get(f.get("key", None), None)
             if not stfield or not stfield.get("buildin", None):
                 raise AssertionError("Invalid map index :" + f["key"])
             tmp["key"] = stfield.get("tag", None)
 
-            # tmp["key"] = subtype["fields"][f["key"]["name"]]
-            # assert tmp["key"], "Invalid map index %d" % f["key"]["name"]
+                    # tmp["key"] = subtype["fields"][f["key"]["name"]]
+                    # assert tmp["key"], "Invalid map index %d" % f["key"]["name"]
         else:
             tmp["key"] = None
         fields.append(packfield(tmp))
@@ -154,15 +154,14 @@ def packgroup(t, p) -> bytes:
         return b"\0\0"
     tp = None
     alltypes = {}
-    alltype_names = []
-    for name in t:
-        alltype_names.append(name)
-    alltype_names.sort()
+    alltype_names = sorted(t)
     for idx, name in enumerate(alltype_names):
-        fields = {}
-        for type_fields in t[name]:
-            if type_fields["typename"] in sprotoparser.builtin_types:  # todo add key too nested
-                fields[type_fields["name"]] = type_fields["tag"]
+        fields = {
+            type_fields["name"]: type_fields["tag"]
+            for type_fields in t[name]
+            if type_fields["typename"] in sprotoparser.builtin_types
+        }
+
         alltypes[name] = {"id": idx, "fields": fields}
 
     tt = BytesIO()
@@ -181,7 +180,7 @@ def packgroup(t, p) -> bytes:
             tp.write(packproto(tbl["name"], tbl, alltypes))
         tp = packbytes(tp.getvalue())
     result = BytesIO()
-    if tp == None:
+    if tp is None:
         result.write(b"\1\0\0\0")
         result.write(tt)
         # result = [b"\1\0", b"\0\0", tt]
@@ -204,9 +203,8 @@ def parse_ast(ast) -> bytes:
 def dump(build, outfile):
     data = parse_ast(build)
     if isinstance(outfile, str):
-        f = open(outfile, "wb")
-        f.write(data)
-        f.close()
+        with open(outfile, "wb") as f:
+            f.write(data)
     else:
         outfile.write(data)
 

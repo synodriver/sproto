@@ -65,26 +65,22 @@ def checktype(types, ptype, t):
     if t in builtin_types:
         return t
 
-    fullname = "%s.%s" % (ptype, t)
+    fullname = f"{ptype}.{t}"
     if fullname in types:
         return fullname
-    else:
-        sobj = rawre.search("(.+)\..+$", ptype)
-        if sobj:
-            return checktype(types, sobj.group(1), t)
-        elif t in types:
-            return t
+    if sobj := rawre.search("(.+)\..+$", ptype):
+        return checktype(types, sobj.group(1), t)
+    elif t in types:
+        return t
 
 
 def flattypename(r):
     for typename, t in r["type"].items():
-        for _, f in enumerate(t):
+        for f in t:
             ftype = f["typename"]
             fullname = checktype(r["type"], typename, ftype)
-            assert fullname != None, "Undefined type %s in type %s" % (ftype, typename)
+            assert fullname != None, f"Undefined type {ftype} in type {typename}"
             f["typename"] = fullname
-            if "array" in f and "key" in f:
-                pass
 
 
 class Convert:
@@ -117,7 +113,7 @@ class Convert:
     @staticmethod
     def convert_type(obj, parent_name=""):  # todo add mainkey
         if parent_name != "":
-            obj.name = parent_name + "." + obj.name
+            obj.name = f"{parent_name}.{obj.name}"
         type_name = obj.name
         if type_name in Convert.type_dict.keys():
             print("Error:redifine %s\n" % (type_name))
@@ -131,12 +127,14 @@ class Convert:
             if type(filed) == Filed:
                 filed_typename = filed.typename.fullname
                 filed_type = Convert.get_typename(filed_typename)
-                filed_info = {}
-                filed_info["name"] = filed.filed
-                filed_info["tag"] = int(filed.tag)
-                filed_info["array"] = filed.typename.is_arr
-                filed_info["typename"] = filed_typename
-                filed_info["type"] = filed_type
+                filed_info = {
+                    "name": filed.filed,
+                    "tag": int(filed.tag),
+                    "array": filed.typename.is_arr,
+                    "typename": filed_typename,
+                    "type": filed_type,
+                }
+
                 if len(filed) > 0:
                     if filed_typename == "integer":
                         filed_info["decimal"] = filed[0]
@@ -156,16 +154,17 @@ class Convert:
         if obj.tag in Convert.protocol_tags.keys():
             print("Error:redifine protocol tags %d \n" % (obj.tag))
             return
-        protocol = {}
-        protocol["tag"] = int(obj.tag)
-        protocol["name"] = obj.name
+        protocol = {"tag": int(obj.tag), "name": obj.name}
         for fi in obj.fileds:
             if type(fi.pro_filed) == TypeName:
-                assert fi.pro_filed.is_arr == False, "syntax error at %s.%s" % (obj.name, fi.subpro_type)
-                newtype_name = str(''.join(fi.pro_filed.fullname))
+                assert (
+                    fi.pro_filed.is_arr == False
+                ), f"syntax error at {obj.name}.{fi.subpro_type}"
+
+                newtype_name = ''.join(fi.pro_filed.fullname)
                 protocol[fi.subpro_type] = newtype_name
             elif type(fi.pro_filed) == Struct:
-                newtype_name = obj.name + "." + fi.subpro_type
+                newtype_name = f"{obj.name}.{fi.subpro_type}"
                 Convert.type_dict[newtype_name] = Convert.convert_struct(fi.pro_filed, newtype_name)
                 protocol[fi.subpro_type] = newtype_name
 
@@ -174,10 +173,7 @@ class Convert:
 
     @staticmethod
     def get_typename(name):
-        if name in builtin_types:
-            return "builtin"
-        else:
-            return "UserDefine"
+        return "builtin" if name in builtin_types else "UserDefine"
 
 
 # ===============================================================
@@ -200,11 +196,14 @@ def parse_list(sproto_list):
 
         # merge type
         for stname, stype in ast["type"].iteritems():
-            assert stname not in build["type"], "redifine type %s in %s" % (stname, v[1])
+            assert stname not in build["type"], f"redifine type {stname} in {v[1]}"
             build["type"][stname] = stype
         # merge protocol
         for spname, sp in ast["protocol"].iteritems():
-            assert spname not in build["protocol"], "redifine protocol name %s in %s" % (spname, v[1])
+            assert (
+                spname not in build["protocol"]
+            ), f"redifine protocol name {spname} in {v[1]}"
+
             for proto in build["protocol"]:
                 assert sp["tag"] != build["protocol"][proto]["tag"], "redifine protocol tag %d in %s with %s" % (
                     sp["tag"], proto, spname)
