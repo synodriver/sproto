@@ -1,11 +1,12 @@
-from unittest import TestCase
-from random import randint
 import gc
+from random import randint
+from unittest import TestCase
+
+from pysproto import Sproto, pack, parse, parse_ast, unpack
+
 # import sys
 #
 # sys.path.append("/sproto")
-
-from pysproto import pack, unpack, parse, parse_ast, Sproto
 
 
 class TestSproto(TestCase):
@@ -28,15 +29,20 @@ class TestSproto(TestCase):
             for i in range(1000):
                 length = randint(1, 1000)
                 data = bytes([randint(0, 255) for _ in range(length)])
-                self.assertEqual(unpack(pack(data)).rstrip(b"\x00"), data.rstrip(b"\x00"))
+                self.assertEqual(
+                    unpack(pack(data)).rstrip(b"\x00"), data.rstrip(b"\x00")
+                )
 
         self._run_gc_test(test_pack_unpack_)
 
     def test_dump(self):
-        ast = parse(""".package {
+        ast = parse(
+            """.package {
                                 type 0 : integer
                                 session 1 : integer
-                            }""", "")
+                            }""",
+            "",
+        )
         dump = parse_ast(ast)
 
         def test_dump_():
@@ -53,7 +59,8 @@ class TestSproto(TestCase):
         test_dump_()
 
     def test_dump_nested(self):
-        ast = parse("""
+        ast = parse(
+            """
         .Person {
         name 0 : string
         id 1 : integer
@@ -72,7 +79,9 @@ class TestSproto(TestCase):
         person 0: *Person(id)
         others 1: *Person
     }
-        """, "")
+        """,
+            "",
+        )
         dump = parse_ast(ast)
         sp = Sproto(dump)
         sp.dump()
@@ -105,39 +114,41 @@ class TestSproto(TestCase):
 
     def test_spb(self):
         """
-        AddressBook
-	person (0) *Person key[1]
-	others (1) *Person
-Person
-	name (0) binary
-	id (1) integer
-	email (2) binary
-	phone (3) *Person.PhoneNumber
-	pi (4) decimal(100000)
-Person.PhoneNumber
-	number (0) binary
-	type (1) integer
+                AddressBook
+                person (0) *Person key[1]
+                others (1) *Person
+        Person
+                name (0) binary
+                id (1) integer
+                email (2) binary
+                phone (3) *Person.PhoneNumber
+                pi (4) decimal(100000)
+        Person.PhoneNumber
+                number (0) binary
+                type (1) integer
         """
         with open(r"person.spb", "rb") as f:
             data = f.read()
         sp = Sproto(data)
         # sp.dump()
         tp = sp.querytype("Person")
-        encoded = tp.encode({
-            "name": b"crystal",
-            "id": 1001,
-            "email": b"crystal@example.com",
-            "phone": [
-                {
-                    "type": 1,
-                    "number": b"10086",
-                },
-                {
-                    "type": 2,
-                    "number": b"10010",
-                },
-            ],
-        })
+        encoded = tp.encode(
+            {
+                "name": b"crystal",
+                "id": 1001,
+                "email": b"crystal@example.com",
+                "phone": [
+                    {
+                        "type": 1,
+                        "number": b"10086",
+                    },
+                    {
+                        "type": 2,
+                        "number": b"10010",
+                    },
+                ],
+            }
+        )
         print(encoded)
         dt = tp.decode(encoded)
         print(dt)

@@ -1,21 +1,24 @@
 # cython: language_level=3
 cimport cython
-from libc.stdint cimport uint8_t, int64_t, int32_t
+from cpython.bool cimport PyBool_FromLong
+from cpython.bytes cimport (PyBytes_AsStringAndSize, PyBytes_Check,
+                            PyBytes_FromStringAndSize)
+from cpython.dict cimport (PyDict_Check, PyDict_GetItemString, PyDict_New,
+                           PyDict_SetItem, PyDict_SetItemString)
+from cpython.exc cimport PyErr_Occurred, PyErr_Print
+from cpython.float cimport PyFloat_AsDouble, PyFloat_Check, PyFloat_FromDouble
+from cpython.list cimport PyList_Append, PyList_Check, PyList_New, PyList_Size
+from cpython.long cimport (PyLong_AsLong, PyLong_AsLongLong, PyLong_Check,
+                           PyLong_FromLong, PyLong_FromLongLong)
+from cpython.mem cimport PyMem_Free, PyMem_Malloc, PyMem_Realloc
+from cpython.object cimport PyObject
+from cpython.ref cimport Py_TYPE
+from cpython.unicode cimport PyUnicode_DecodeUTF8
+from libc.stdint cimport int32_t, int64_t, uint8_t
 from libc.string cimport memcpy
 
-from cpython.object cimport PyObject
-from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
-from cpython.long cimport PyLong_AsLong, PyLong_FromLong,PyLong_FromLongLong, PyLong_AsLongLong, PyLong_Check
-from cpython.float cimport PyFloat_Check, PyFloat_AsDouble, PyFloat_FromDouble
-from cpython.bool cimport PyBool_FromLong
-from cpython.ref cimport Py_TYPE
-from cpython.dict cimport PyDict_GetItemString, PyDict_Check, PyDict_SetItemString, PyDict_SetItem, PyDict_New
-from cpython.list cimport PyList_Check, PyList_Size, PyList_New, PyList_Append
-from cpython.bytes cimport PyBytes_Check, PyBytes_AsStringAndSize, PyBytes_FromStringAndSize
-from cpython.unicode cimport PyUnicode_DecodeUTF8
-from cpython.exc cimport PyErr_Occurred, PyErr_Print
-
 from pysproto cimport sproto
+
 
 cdef extern from "Python.h":
     char* PyUnicode_AsUTF8AndSize(object data, Py_ssize_t* l)

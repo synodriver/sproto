@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
+
 from pypeg2 import *
 
 pypeg2_parse = parse  # rename it,for avoiding name conflict
@@ -21,8 +22,16 @@ class TypeName(object):
 
 
 class Filed(List):
-    grammar = attr("filed", word), attr("tag", tag), ":", attr("typename", TypeName), \
-              optional(Decimal), optional(MainKey), nomeaning, endl
+    grammar = (
+        attr("filed", word),
+        attr("tag", tag),
+        ":",
+        attr("typename", TypeName),
+        optional(Decimal),
+        optional(MainKey),
+        nomeaning,
+        endl,
+    )
 
 
 class Struct(List):
@@ -42,12 +51,24 @@ class Sub_pro_type(Keyword):
 
 
 class Subprotocol(List):
-    grammar = attr("subpro_type", Sub_pro_type), attr("pro_filed", [TypeName, Struct]), nomeaning
+    grammar = (
+        attr("subpro_type", Sub_pro_type),
+        attr("pro_filed", [TypeName, Struct]),
+        nomeaning,
+    )
 
 
 class Protocol(List):
-    grammar = nomeaning, attr("name", word), attr("tag", tag), "{", nomeaning, attr("fileds", maybe_some(
-        Subprotocol)), "}", nomeaning
+    grammar = (
+        nomeaning,
+        attr("name", word),
+        attr("tag", tag),
+        "{",
+        nomeaning,
+        attr("fileds", maybe_some(Subprotocol)),
+        "}",
+        nomeaning,
+    )
 
 
 class Sproto(List):
@@ -56,7 +77,13 @@ class Sproto(List):
 
 # ====================================================================
 
-builtin_types = {"integer": 0, "boolean": 1, "string": 2, "double": 3, "binary": 2}  # add double and binary
+builtin_types = {
+    "integer": 0,
+    "boolean": 1,
+    "string": 2,
+    "double": 3,
+    "binary": 2,
+}  # add double and binary
 
 import re as rawre
 
@@ -161,12 +188,17 @@ class Convert:
         protocol["name"] = obj.name
         for fi in obj.fileds:
             if type(fi.pro_filed) == TypeName:
-                assert fi.pro_filed.is_arr == False, "syntax error at %s.%s" % (obj.name, fi.subpro_type)
-                newtype_name = str(''.join(fi.pro_filed.fullname))
+                assert fi.pro_filed.is_arr == False, "syntax error at %s.%s" % (
+                    obj.name,
+                    fi.subpro_type,
+                )
+                newtype_name = str("".join(fi.pro_filed.fullname))
                 protocol[fi.subpro_type] = newtype_name
             elif type(fi.pro_filed) == Struct:
                 newtype_name = obj.name + "." + fi.subpro_type
-                Convert.type_dict[newtype_name] = Convert.convert_struct(fi.pro_filed, newtype_name)
+                Convert.type_dict[newtype_name] = Convert.convert_struct(
+                    fi.pro_filed, newtype_name
+                )
                 protocol[fi.subpro_type] = newtype_name
 
         Convert.protocol_dict[obj.name] = protocol
@@ -200,14 +232,20 @@ def parse_list(sproto_list):
 
         # merge type
         for stname, stype in ast["type"].iteritems():
-            assert stname not in build["type"], "redifine type %s in %s" % (stname, v[1])
+            assert stname not in build["type"], "redifine type %s in %s" % (
+                stname,
+                v[1],
+            )
             build["type"][stname] = stype
         # merge protocol
         for spname, sp in ast["protocol"].iteritems():
-            assert spname not in build["protocol"], "redifine protocol name %s in %s" % (spname, v[1])
+            assert (
+                spname not in build["protocol"]
+            ), "redifine protocol name %s in %s" % (spname, v[1])
             for proto in build["protocol"]:
-                assert sp["tag"] != build["protocol"][proto]["tag"], "redifine protocol tag %d in %s with %s" % (
-                    sp["tag"], proto, spname)
+                assert (
+                    sp["tag"] != build["protocol"][proto]["tag"]
+                ), "redifine protocol tag %d in %s with %s" % (sp["tag"], proto, spname)
             build["protocol"][spname] = sp
 
     flattypename(build)

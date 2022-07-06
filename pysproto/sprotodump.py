@@ -1,10 +1,10 @@
 # coding:utf-8
-from typing import Union
-import struct
-from io import BytesIO
-import sys
 import argparse
 import os
+import struct
+import sys
+from io import BytesIO
+from typing import Union
 
 import pysproto.sprotoparser as sprotoparser
 
@@ -26,7 +26,7 @@ def packvalue(v: int) -> bytes:
 
 
 def packfield(f):
-    strtbl = BytesIO()   # todo L289
+    strtbl = BytesIO()  # todo L289
     if f["array"]:
         if f["key"]:  # if has no "key" already set to f["key"] = None
             if f.get("map", None):
@@ -91,7 +91,10 @@ def packtype(name, t, alltypes):
                     if t["tag"] < min_t:
                         min_t = t["tag"]
                         f["key"] = n
-                assert c == 2, "Invalid map definition: %s, must only have two fields" % tmp["name"]
+                assert c == 2, (
+                    "Invalid map definition: %s, must only have two fields"
+                    % tmp["name"]
+                )
             stfield = subtype["fields"].get(f.get("key", None), None)
             if not stfield or not stfield.get("buildin", None):
                 raise AssertionError("Invalid map index :" + f["key"])
@@ -118,7 +121,10 @@ def packtype(name, t, alltypes):
 def packproto(name, p, alltypes) -> bytes:
     if "request" in p:
         request = alltypes[p["request"]]
-        assert request != None, "Protocol %s request types not found" % (name, p["request"])
+        assert request != None, "Protocol %s request types not found" % (
+            name,
+            p["request"],
+        )
         request = request["id"]
 
     tmp = BytesIO()
@@ -161,13 +167,17 @@ def packgroup(t, p) -> bytes:
     for idx, name in enumerate(alltype_names):
         fields = {}
         for type_fields in t[name]:
-            if type_fields["typename"] in sprotoparser.builtin_types:  # todo add key too nested
+            if (
+                type_fields["typename"] in sprotoparser.builtin_types
+            ):  # todo add key too nested
                 fields[type_fields["name"]] = type_fields["tag"]
         alltypes[name] = {"id": idx, "fields": fields}
 
     tt = BytesIO()
     for name in alltype_names:
-        tt.write(packtype(name, t[name], alltypes)) # alltypes["Person"]["fields"]["key"]
+        tt.write(
+            packtype(name, t[name], alltypes)
+        )  # alltypes["Person"]["fields"]["key"]
 
     tt = packbytes(tt.getvalue())
     if p:
@@ -215,8 +225,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--directory", dest="src_dir", help="sproto source files")
     parser.add_argument("-f", "--file", dest="src_file", help="sproto single file")
-    parser.add_argument("-o", "--out", dest="outfile", default="sproto.spb", help="specific dump binary file")
-    parser.add_argument("-v", "--verbose", dest="verbose", action="store_true", help="show more info")
+    parser.add_argument(
+        "-o",
+        "--out",
+        dest="outfile",
+        default="sproto.spb",
+        help="specific dump binary file",
+    )
+    parser.add_argument(
+        "-v", "--verbose", dest="verbose", action="store_true", help="show more info"
+    )
     args = parser.parse_args()
 
     build = None
