@@ -1,0 +1,3 @@
+recursive-include pysproto  *
+recursive-include sproto  *
+include README.markdown

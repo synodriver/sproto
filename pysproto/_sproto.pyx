@@ -140,7 +140,8 @@ cdef int encode(const sproto.sproto_arg *args) except * with gil:
         return <int>l
     elif type == sproto.SPROTO_TSTRUCT: # L152
         sub.data = <PyObject*>data
-        r = sproto.sproto_encode(args.subtype, args.value, length, encode, &sub)
+        with nogil:
+            r = sproto.sproto_encode(args.subtype, args.value, length, encode, &sub)
         if r<0:
             return sproto.SPROTO_CB_ERROR
         return r
@@ -266,7 +267,8 @@ cdef int decode(const sproto.sproto_arg *args) except * with gil: # except * wit
         sub.data = <PyObject*>d
         if mainindex >= 0:
             sub.mainindex = args.mainindex
-            r = sproto.sproto_decode(args.subtype, args.value, <int>length, decode, &sub)
+            with nogil:
+                r = sproto.sproto_decode(args.subtype, args.value, <int>length, decode, &sub)
             if r<0:
                 return sproto.SPROTO_CB_ERROR
             if r!=length:
@@ -275,7 +277,8 @@ cdef int decode(const sproto.sproto_arg *args) except * with gil: # except * wit
         else:
             sub.mainindex = -1
             data = <object>sub.data
-            r = sproto.sproto_decode(args.subtype, args.value, <int>length, decode, &sub)
+            with nogil:
+                r = sproto.sproto_decode(args.subtype, args.value, <int>length, decode, &sub)
             if r<0:
                 return sproto.SPROTO_CB_ERROR
             if r!=length:
@@ -297,7 +300,8 @@ cdef int decode(const sproto.sproto_arg *args) except * with gil: # except * wit
     return 0
 
 
-
+@cython.freelist(8)
+@cython.no_gc
 @cython.final
 cdef class SprotoType:
     """Wrapper around struct sproto_type"""
@@ -318,8 +322,10 @@ cdef class SprotoType:
         cdef:
             dict d = {}
             decode_ud ud
+            int r
         ud.data = <PyObject*>d
-        cdef int r = sproto.sproto_decode(self.st, <void*>&buffer[0], <int>buffer.shape[0], decode, &ud)
+        with nogil:
+            r = sproto.sproto_decode(self.st, <void*>&buffer[0], <int>buffer.shape[0], decode, &ud)
         if PyErr_Occurred():
             PyErr_Print()
             raise SprotoError("decode error")
@@ -338,7 +344,8 @@ cdef class SprotoType:
         cdef:
             int ret
             encode_ud ud = encode_ud(<PyObject*>data, NULL)
-        ret = sproto.sproto_encode(self.st, <void*>&buffer[0], <int>buffer.shape[0], encode, &ud)
+        with nogil:
+            ret = sproto.sproto_encode(self.st, <void*>&buffer[0], <int>buffer.shape[0], encode, &ud)
         if ret < 0:
             raise SprotoError("buffer is too small")
         return ret
@@ -354,7 +361,8 @@ cdef class SprotoType:
             raise MemoryError
         try:
             while True:
-                ret = sproto.sproto_encode(self.st, buf, <int>prealloc, encode, &ud)
+                with nogil:
+                    ret = sproto.sproto_encode(self.st, buf, <int>prealloc, encode, &ud)
                 if PyErr_Occurred():
                     PyErr_Print()
                     raise SprotoError("encode error")
@@ -368,7 +376,8 @@ cdef class SprotoType:
         finally:
             PyMem_Free(buf)
 
-
+@cython.freelist(8)
+@cython.no_gc
 @cython.final
 cdef class Sproto:
     """Wrapper around struct sproto"""
@@ -386,13 +395,16 @@ cdef class Sproto:
 
     cpdef inline void dump(self):
         assert self.sp != NULL
-        sproto.sproto_dump(self.sp)
+        with nogil:
+            sproto.sproto_dump(self.sp)
 
     cpdef inline SprotoType querytype(self, type_name):
         assert self.sp != NULL
         type_name = _ensure_bytes(type_name)
         cdef sproto.sproto_type_t *st
-        st = sproto.sproto_type(self.sp, <char*>type_name)
+        cdef char* type_name_c = <char*>type_name
+        with nogil:
+            st = sproto.sproto_type(self.sp, type_name_c)
         if st:
             return SprotoType.from_ptr(st)
 
@@ -406,39 +418,45 @@ cdef class Sproto:
             object ret1, ret2, ret3  # firtst ret params
         if isinstance(tag_or_name, int):
             tag = <int>PyLong_AsLong(tag_or_name)
-            name = sproto.sproto_protoname(self.sp, tag_or_name)
+            with nogil:
+                name = sproto.sproto_protoname(self.sp, tag)
             if name == NULL:
                 return None
             ret1  = (<bytes>name).decode()
         elif isinstance(tag_or_name, (str, bytes)):
             bt = _ensure_bytes(tag_or_name)
             name = <const char*>bt
-            tag = sproto.sproto_prototag(self.sp, name)
+            with nogil:
+                tag = sproto.sproto_prototag(self.sp, name)
             if tag < 0:
                 return None
             ret1  = PyLong_FromLong(<int>tag)
-        request = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_REQUEST)
+        with nogil:
+            request = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_REQUEST)
         if request == NULL:
             ret2 = None
         else:
             ret2 = SprotoType.from_ptr(request)
-        response = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_RESPONSE)
+        with nogil:
+            response = sproto.sproto_protoquery(self.sp, tag, sproto.SPROTO_RESPONSE)
         if response == NULL:
             ret3 = None
         else:
             ret3 = SprotoType.from_ptr(response)
         return (ret1, ret2, ret3)
 
-    cpdef inline int sproto_protoresponse(self, int proto):
+    cpdef inline int sproto_protoresponse(self, int proto) nogil:
         return sproto.sproto_protoresponse(self.sp, proto)
 
 cpdef inline int pack_into(const uint8_t[::1] inp, uint8_t[::1] out):
     cdef:
         size_t sz = <size_t>inp.shape[0]
         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
+        int ret
     if <size_t>out.shape[0] < maxsz:
         raise SprotoError("output buffer is too small")
-    cdef int ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)
+    with nogil:
+        ret =  sproto.sproto_pack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>maxsz)
     if <size_t>ret > maxsz:
         raise SprotoError("packing error, return size = %d" % ret)
     return ret
@@ -448,10 +466,12 @@ cpdef inline bytes pack(const uint8_t[::1] inp):
     cdef:
         size_t sz = <size_t> inp.shape[0]
         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
+        int ret
     cdef void* out = PyMem_Malloc(maxsz)
     if out == NULL:
         raise MemoryError
-    cdef int ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)
+    with nogil:
+        ret = sproto.sproto_pack(<void *> &inp[0], <int> inp.shape[0], out, <int>maxsz)
     if <size_t>ret > maxsz:
         raise SprotoError("packing error, return size = %d" % ret)
     bt = <bytes>((<uint8_t*>out)[:ret])
@@ -460,7 +480,9 @@ cpdef inline bytes pack(const uint8_t[::1] inp):
 
 
 cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out):
-    cdef int ret =  sproto.sproto_unpack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>out.shape[0])
+    cdef int ret
+    with nogil:
+        ret =  sproto.sproto_unpack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>out.shape[0])
     if ret < 0:
         raise SprotoError("Invalid unpack stream")
     return ret
@@ -471,7 +493,9 @@ cpdef inline bytes unpack(const uint8_t[::1] inp):
     if out == NULL:
         raise MemoryError
     cdef int osz = sproto.ENCODE_BUFFERSIZE
-    cdef int ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
+    cdef int ret
+    with nogil:
+        ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
     if ret < 0:
         raise SprotoError("Invalid unpack stream")
     if ret > osz:
@@ -479,7 +503,8 @@ cpdef inline bytes unpack(const uint8_t[::1] inp):
         if out == NULL:
             raise MemoryError
         osz = ret
-        ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
+        with nogil:
+            ret = sproto.sproto_unpack(<void *> &inp[0], <int> inp.shape[0], out, osz)
         if ret < 0:
             raise SprotoError("Invalid unpack stream")
     bt = <bytes>((<uint8_t*>out)[:ret])
