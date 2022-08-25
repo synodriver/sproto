@@ -411,11 +411,11 @@ cdef class Sproto:
         if st:
             return SprotoType.from_ptr(st)
 
-    cpdef inline object protocol(self, tag_or_name):
+    cpdef inline object protocol(self, object tag_or_name):
         assert self.sp != NULL
         cdef:
             const char* name
-            int tag
+            int tag = 0
             sproto.sproto_type_t * request
             sproto.sproto_type_t * response
             object ret1, ret2, ret3  # firtst ret params

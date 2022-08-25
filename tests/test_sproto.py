@@ -2,11 +2,12 @@ import gc
 from random import randint
 from unittest import TestCase
 
+import sys
+
+sys.path.append(".")
+
 from pysproto import Sproto, pack, parse, parse_ast, unpack
 
-# import sys
-#
-# sys.path.append("/sproto")
 
 
 class TestSproto(TestCase):

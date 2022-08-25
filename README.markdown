@@ -14,6 +14,11 @@
 
 ### Usage
 
+- install
+```
+pip install sproto
+```
+
 - encode & decode
 ```python
 from pysproto import parse, parse_ast, Sproto
