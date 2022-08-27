@@ -336,7 +336,7 @@ cdef class SprotoType:
             raise SprotoError("decode error")
         return d
 
-    cpdef inline int encode_into(self, dict data, uint8_t[::1] buffer):
+    cpdef inline int encode_into(self, dict data, uint8_t[::1] buffer) except -1:
         """
         encode data into buffer
         :param data: 
@@ -396,7 +396,7 @@ cdef class Sproto:
             sproto.sproto_release(self.sp)
             self.sp = NULL
 
-    cpdef inline void dump(self):
+    def dump(self):
         assert self.sp != NULL
         with nogil:
             sproto.sproto_dump(self.sp)
@@ -448,10 +448,13 @@ cdef class Sproto:
             ret3 = SprotoType.from_ptr(response)
         return (ret1, ret2, ret3)
 
-    cpdef inline int sproto_protoresponse(self, int proto) nogil:
-        return sproto.sproto_protoresponse(self.sp, proto)
+    cpdef inline int sproto_protoresponse(self, int proto):
+        cdef int ret
+        with nogil:
+            ret = sproto.sproto_protoresponse(self.sp, proto)
+        return ret
 
-cpdef inline int pack_into(const uint8_t[::1] inp, uint8_t[::1] out):
+cpdef inline int pack_into(const uint8_t[::1] inp, uint8_t[::1] out) except -1:
     cdef:
         size_t sz = <size_t>inp.shape[0]
         size_t maxsz = (sz + 2047) / 2048 * 2 + sz + 2
@@ -482,7 +485,7 @@ cpdef inline bytes pack(const uint8_t[::1] inp):
     return bt
 
 
-cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out):
+cpdef inline int unpack_into(const uint8_t[::1] inp, uint8_t[::1] out) except -1:
     cdef int ret
     with nogil:
         ret =  sproto.sproto_unpack(<void*>&inp[0], <int>inp.shape[0], <void*>&out[0], <int>out.shape[0])
