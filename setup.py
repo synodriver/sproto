@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+import sys
 from collections import defaultdict
 
 from Cython.Build import cythonize
+from Cython.Compiler.Version import version as cython_version
+from packaging.version import Version
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
 
@@ -24,6 +27,17 @@ class build_ext_compiler_check(build_ext):
             ext.extra_compile_args = args
         super().build_extensions()
 
+if (
+    sys.version_info > (3, 13, 0)
+    and hasattr(sys, "_is_gil_enabled")
+    and not sys._is_gil_enabled()
+):
+    print("build nogil")
+    defined_macros = [
+        ("Py_GIL_DISABLED", "1"),
+    ]  # ("CYTHON_METH_FASTCALL", "1"), ("CYTHON_VECTORCALL",  1)]
+else:
+    defined_macros = []
 
 extensions = [
     Extension(
@@ -31,6 +45,7 @@ extensions = [
         ["pysproto/_sproto.pyx", f"sproto/sproto.c"],
         include_dirs=[f"./sproto"],
         library_dirs=[f"./sproto"],
+        define_macros=defined_macros,
     ),
 ]
 
@@ -51,6 +66,17 @@ def get_version() -> str:
 
 
 packages = find_packages(exclude=("test", "tests.*", "test*"))
+
+compiler_directives = {
+    "cdivision": True,
+    "embedsignature": True,
+    "boundscheck": False,
+    "wraparound": False,
+}
+
+
+if Version(cython_version) >= Version("3.1.0a0"):
+    compiler_directives["freethreading_compatible"] = True
 
 
 def main():
@@ -83,6 +109,7 @@ def main():
             "Programming Language :: Python :: 3.10",
             "Programming Language :: Python :: 3.11",
             "Programming Language :: Python :: 3.12",
+            "Programming Language :: Python :: 3.13",
             "Programming Language :: Python :: Implementation :: CPython",
         ],
         include_package_data=True,
@@ -90,12 +117,7 @@ def main():
         cmdclass={"build_ext": build_ext_compiler_check},
         ext_modules=cythonize(
             extensions,
-            compiler_directives={
-                "cdivision": True,
-                "embedsignature": True,
-                "boundscheck": False,
-                "wraparound": False,
-            },
+            compiler_directives=compiler_directives,
         ),
     )
 
