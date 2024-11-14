@@ -231,14 +231,14 @@ def parse_list(sproto_list):
         ast = Convert.parse(v[0], v[1])
 
         # merge type
-        for stname, stype in ast["type"].iteritems():
+        for stname, stype in ast["type"].items():
             assert stname not in build["type"], "redifine type %s in %s" % (
                 stname,
                 v[1],
             )
             build["type"][stname] = stype
         # merge protocol
-        for spname, sp in ast["protocol"].iteritems():
+        for spname, sp in ast["protocol"].items():
             assert (
                 spname not in build["protocol"]
             ), "redifine protocol name %s in %s" % (spname, v[1])

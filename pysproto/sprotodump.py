@@ -182,7 +182,7 @@ def packgroup(t, p) -> bytes:
     tt = packbytes(tt.getvalue())
     if p:
         tmp = []
-        for name, tbl in p.iteritems():
+        for name, tbl in p.items():
             tmp.append(tbl)
             tbl["name"] = name
         tmp = sorted(tmp, key=lambda k: k["tag"])
