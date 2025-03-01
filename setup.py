@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import sys
+import sysconfig
 from collections import defaultdict
 
 from Cython.Build import cythonize
@@ -27,15 +27,13 @@ class build_ext_compiler_check(build_ext):
             ext.extra_compile_args = args
         super().build_extensions()
 
-if (
-    sys.version_info > (3, 13, 0)
-    and hasattr(sys, "_is_gil_enabled")
-    and not sys._is_gil_enabled()
-):
+
+if sysconfig.get_config_var("Py_GIL_DISABLED"):
     print("build nogil")
     defined_macros = [
         ("Py_GIL_DISABLED", "1"),
-    ]  # ("CYTHON_METH_FASTCALL", "1"), ("CYTHON_VECTORCALL",  1)]
+    ]
+# ("CYTHON_METH_FASTCALL", "1"), ("CYTHON_VECTORCALL",  1)]
 else:
     defined_macros = []
 
