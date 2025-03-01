@@ -59,10 +59,10 @@ def packfield(f):
     return packbytes(strtbl.getvalue())
 
 
-def packtype(name, t, alltypes):
+def packtype(name, types_, alltypes):
     fields = []
     tmp = {}
-    for f in t:  # type: dict
+    for f in types_:  # type: dict
         tmp["array"] = f["array"]
         tmp["name"] = f["name"]
         tmp["tag"] = f["tag"]
@@ -86,19 +86,22 @@ def packtype(name, t, alltypes):
                 tmp["map"] = 1
                 c = 0
                 min_t = sys.maxsize
-                for n, t in enumerate(subtype["fields"]):
+                for n, types_ in enumerate(subtype["fields"]):
                     c += 1
-                    if t["tag"] < min_t:
-                        min_t = t["tag"]
+                    if types_["tag"] < min_t:
+                        min_t = types_["tag"]
                         f["key"] = n
                 assert c == 2, (
                     "Invalid map definition: %s, must only have two fields"
                     % tmp["name"]
                 )
             stfield = subtype["fields"].get(f.get("key", None), None)
-            if not stfield or not stfield.get("buildin", None):
-                raise AssertionError("Invalid map index :" + f["key"])
-            tmp["key"] = stfield.get("tag", None)
+            try:
+                if not stfield or not stfield.get("buildin", None):
+                    raise AssertionError("Invalid map index :" + str(f["key"]))
+                tmp["key"] = stfield.get("tag", None)
+            except AttributeError:
+                tmp["key"] = stfield
 
             # tmp["key"] = subtype["fields"][f["key"]["name"]]
             # assert tmp["key"], "Invalid map index %d" % f["key"]["name"]
@@ -148,25 +151,25 @@ def packproto(name, p, alltypes) -> bytes:
     return packbytes(tmp.getvalue())
 
 
-def packgroup(t, p) -> bytes:
+def packgroup(types_, protocols) -> bytes:
     """
 
-    :param t: Type
-    :param p: Protocol
+    :param types_: Type
+    :param protocols: Protocol
     :return:
     """
-    if not t:
-        assert p
+    if not types_:
+        assert protocols
         return b"\0\0"
     tp = None
     alltypes = {}
     alltype_names = []
-    for name in t:
+    for name in types_:
         alltype_names.append(name)
     alltype_names.sort()
     for idx, name in enumerate(alltype_names):
         fields = {}
-        for type_fields in t[name]:
+        for type_fields in types_[name]:
             if (
                 type_fields["typename"] in sprotoparser.builtin_types
             ):  # todo add key too nested
@@ -176,13 +179,13 @@ def packgroup(t, p) -> bytes:
     tt = BytesIO()
     for name in alltype_names:
         tt.write(
-            packtype(name, t[name], alltypes)
+            packtype(name, types_[name], alltypes)
         )  # alltypes["Person"]["fields"]["key"]
 
     tt = packbytes(tt.getvalue())
-    if p:
+    if protocols:
         tmp = []
-        for name, tbl in p.items():
+        for name, tbl in protocols.items():
             tmp.append(tbl)
             tbl["name"] = name
         tmp = sorted(tmp, key=lambda k: k["tag"])

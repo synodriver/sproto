@@ -21,9 +21,9 @@ class TypeName(object):
     grammar = flag("is_arr", "*"), attr("fullname", fullname)
 
 
-class Filed(List):
+class Field(List):
     grammar = (
-        attr("filed", word),
+        attr("field", word),
         attr("tag", tag),
         ":",
         attr("typename", TypeName),
@@ -42,7 +42,7 @@ class Type(List):
     pass
 
 
-Struct.grammar = "{", nomeaning, attr("fileds", maybe_some([Filed, Type])), "}"
+Struct.grammar = "{", nomeaning, attr("fields", maybe_some([Field, Type])), "}"
 Type.grammar = nomeaning, ".", name(), attr("struct", Struct), nomeaning
 
 
@@ -53,7 +53,7 @@ class Sub_pro_type(Keyword):
 class Subprotocol(List):
     grammar = (
         attr("subpro_type", Sub_pro_type),
-        attr("pro_filed", [TypeName, Struct]),
+        attr("pro_field", [TypeName, Struct]),
         nomeaning,
     )
 
@@ -65,7 +65,7 @@ class Protocol(List):
         attr("tag", tag),
         "{",
         nomeaning,
-        attr("fileds", maybe_some(Subprotocol)),
+        attr("fields", maybe_some(Subprotocol)),
         "}",
         nomeaning,
     )
@@ -154,25 +154,25 @@ class Convert:
     @staticmethod
     def convert_struct(obj, name=""):  # todo 你 加入decimal
         struct = []
-        for filed in obj.fileds:
-            if type(filed) == Filed:
-                filed_typename = filed.typename.fullname
+        for field in obj.fields:
+            if type(field) == Field:
+                filed_typename = field.typename.fullname
                 filed_type = Convert.get_typename(filed_typename)
                 filed_info = {}
-                filed_info["name"] = filed.filed
-                filed_info["tag"] = int(filed.tag)
-                filed_info["array"] = filed.typename.is_arr
+                filed_info["name"] = field.field
+                filed_info["tag"] = int(field.tag)
+                filed_info["array"] = field.typename.is_arr
                 filed_info["typename"] = filed_typename
                 filed_info["type"] = filed_type
-                if len(filed) > 0:
+                if len(field) > 0:
                     if filed_typename == "integer":
-                        filed_info["decimal"] = filed[0]
+                        filed_info["decimal"] = field[0]
                     else:
-                        filed_info["key"] = filed[0]  # todo 解决冲突
+                        filed_info["key"] = field[0]  # todo 解决冲突
 
                 struct.append(filed_info)
-            elif type(filed) == Type:
-                Convert.convert_type(filed, name)
+            elif type(field) == Type:
+                Convert.convert_type(field, name)
         return struct
 
     @staticmethod
@@ -186,18 +186,18 @@ class Convert:
         protocol = {}
         protocol["tag"] = int(obj.tag)
         protocol["name"] = obj.name
-        for fi in obj.fileds:
-            if type(fi.pro_filed) == TypeName:
-                assert fi.pro_filed.is_arr == False, "syntax error at %s.%s" % (
+        for fi in obj.fields:
+            if type(fi.pro_field) == TypeName:
+                assert fi.pro_field.is_arr == False, "syntax error at %s.%s" % (
                     obj.name,
                     fi.subpro_type,
                 )
-                newtype_name = str("".join(fi.pro_filed.fullname))
+                newtype_name = str("".join(fi.pro_field.fullname))
                 protocol[fi.subpro_type] = newtype_name
-            elif type(fi.pro_filed) == Struct:
+            elif type(fi.pro_field) == Struct:
                 newtype_name = obj.name + "." + fi.subpro_type
                 Convert.type_dict[newtype_name] = Convert.convert_struct(
-                    fi.pro_filed, newtype_name
+                    fi.pro_field, newtype_name
                 )
                 protocol[fi.subpro_type] = newtype_name
 
